@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-// import { userRouter } from "./routes/userRoutes"
+import { userRouter } from "./routes"
 // import { tokenRouter } from "./routes/tokenRoutes"
 // import { pokemonRouter } from "./routes/pokemonRoutes"
 
@@ -19,20 +19,20 @@ const { MONGOOSE_CONNECT } = process.env
 const { NODE_ENV } = process.env
 
 if (NODE_ENV === "development") {
-    mongoose.set("strictQuery", true)
-    if (MONGOOSE_CONNECT !== undefined) {
-        mongoose
-            .connect(MONGOOSE_CONNECT)
-            .then(() => {
-                console.log("MongoDB connected with successful")
-            })
-            .catch(error => {
-                console.log(error)
-            })
-    }
+  mongoose.set("strictQuery", true)
+  if (MONGOOSE_CONNECT !== undefined) {
+    mongoose
+      .connect(MONGOOSE_CONNECT)
+      .then(() => {
+        console.log("MongoDB connected with successful")
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 }
 
-// app.use("/user", userRouter)
+app.use("/user", userRouter)
 // app.use("/pokemon", pokemonRouter)
 // app.use("/token", tokenRouter)
 
