@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser"
 import { userRouter } from "./routes"
 // import { tokenRouter } from "./routes/tokenRoutes"
 // import { pokemonRouter } from "./routes/pokemonRoutes"
-
+import "./types"
 import mongoose from "mongoose"
 import * as dotenv from "dotenv"
 dotenv.config()

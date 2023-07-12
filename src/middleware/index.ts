@@ -1,1 +1,2 @@
-export * from "./authenticate/authenticate"
+export * from "./authenticate/Authenticate"
+export * from "./authenticate/TokenAuthenticate"
