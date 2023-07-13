@@ -10,24 +10,24 @@ export class TokenUser {
     private readonly _Token: Token
   ) {}
 
-  // Esta função tem que se tornar duas, uma para a validação dos dados e outra para execução deles
-
-  private async _loginAccessTokenValidation(): Promise<
-    IResult | { accessToken: string; refreshToken: string }
-  > {
+  async loginAccessTokenValidation(
+    id: string
+  ): Promise<IResult | { accessToken: string; refreshToken: string }> {
     let result: IResult = { message: "", isError: false, error: "" }
-    const { ACCESS_TOKEN, REFRESH_TOKEN } = process.env
     const RefreshToken = model("refreshTokens")
+    const { ACCESS_TOKEN, REFRESH_TOKEN } = process.env
 
-    if (this._req.user?.id === undefined) {
+    if (ACCESS_TOKEN === undefined || REFRESH_TOKEN === undefined) {
       result.isError = true
-      result.error = "Token undefined"
+      result.error = "Token Undefined"
       return result
     }
 
-    const { id } = this._req.user
+    const refreshT = await RefreshToken.findOne({
+      userToken: id
+    })
 
-    if (ACCESS_TOKEN !== undefined && REFRESH_TOKEN !== undefined) {
+    try {
       const accessTokenValues = this._Token.createAccessToken(id)
       const refreshTokenValues = this._Token.createRefreshToken(id)
 
@@ -56,35 +56,24 @@ export class TokenUser {
 
       const { accessToken } = accessTokenValues
       const { refreshToken, refreshTokenExpiresDate } = refreshTokenValues
-
-      // Daqui pra cima uma função, pra baixo outra
-
       const newRefreshToken = {
         refreshToken,
         userToken: id,
         expireDat: refreshTokenExpiresDate
       }
 
-      const refreshT = await RefreshToken.findOne({ userToken: id })
-
-      try {
-        if (refreshT === null) {
-          await new RefreshToken(newRefreshToken).save()
-
-          return { accessToken, refreshToken }
-        }
-
-        await RefreshToken.updateOne({ userToken: id }, newRefreshToken)
+      if (refreshT === null) {
+        await new RefreshToken(newRefreshToken).save()
         return { accessToken, refreshToken }
-      } catch (err) {
-        const error = err as Error
-        result.isError = true
-        result.error = error.message
-        return result
       }
+
+      await RefreshToken.updateOne({ userToken: id }, newRefreshToken)
+      return { accessToken, refreshToken }
+    } catch (err) {
+      const error = err as Error
+      result.isError = true
+      result.error = error.message
+      return result
     }
-    result.isError = true
-    result.error = "Tokens Undefined"
-    return result
   }
 }

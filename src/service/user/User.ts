@@ -4,6 +4,7 @@ import "../../model/User"
 import "../../model/Pokemon"
 import type { EncryptPassword } from "../encryptPassword/EncryptPassword"
 import type { IResult } from "../../types"
+import type { TokenUser } from "../token/TokenUser"
 
 interface IRegisterValidation {
   name: string
@@ -12,17 +13,14 @@ interface IRegisterValidation {
 }
 
 export class User {
-  constructor(
-    private readonly _req: Request,
-    private readonly _EncryptPassword: EncryptPassword
-  ) {}
+  constructor(private readonly _req: Request) {}
 
-  async register(): Promise<IResult> {
+  async register(EncryptPassword: EncryptPassword): Promise<IResult> {
     let result: IResult = { message: "", isError: false, error: "" }
     const User = model("users")
     const Pokemon = model("pokemons")
 
-    const newUser = await this._registerValidation()
+    const newUser = await this._registerValidation(EncryptPassword)
 
     function isIResult(
       newUser: IResult | IRegisterValidation
@@ -51,26 +49,53 @@ export class User {
     }
   }
 
-  async login() {
-    let result: IResult = { message: "", isError: false, error: "" }
-    const User = model("users")
+  async login(
+    TokenUser: TokenUser,
+    EncryptPassword: EncryptPassword
+  ): Promise<IResult> {
+    let result: IResult = { message: "", isError: false, error: "", data: {} }
+    const userId = await this._loginValidation(EncryptPassword)
 
-    const loginValidate = await this._loginValidation()
-
-    function isIResult(data: { id: string } | IResult): data is IResult {
-      return "isError" in data
+    function isIResult(data: string | IResult): data is IResult {
+      return typeof data !== "string"
     }
 
-    if (isIResult(loginValidate)) {
-      result = loginValidate
+    if (isIResult(userId)) {
+      result = userId
       return result
     }
 
     try {
-    } catch (err) {}
+      const loginTokenValidation = await TokenUser.loginAccessTokenValidation(
+        userId
+      )
+
+      function isIResult(
+        data: { accessToken: string; refreshToken: string } | IResult
+      ): data is IResult {
+        return "isError" in data
+      }
+
+      if (isIResult(loginTokenValidation)) {
+        result = loginTokenValidation
+        return result
+      }
+      const { accessToken, refreshToken } = loginTokenValidation
+      result.data = { accessToken, refreshToken }
+      result.message = "User Logged with success"
+
+      return result
+    } catch (err) {
+      const error = err as Error
+      result.isError = true
+      result.error = error.message
+      return result
+    }
   }
 
-  private async _loginValidation(): Promise<IResult | { id: string }> {
+  private async _loginValidation(
+    EncryptPassword: EncryptPassword
+  ): Promise<IResult | string> {
     const result: IResult = { message: "", isError: false, error: "" }
     const User = model("users")
     const { email, password } = this._req.body
@@ -85,7 +110,14 @@ export class User {
       }
 
       const bancPassword = user.password
-      await this._EncryptPassword.compare(password, bancPassword)
+      const comparPassword = await EncryptPassword.compare(
+        password,
+        bancPassword
+      )
+
+      if (comparPassword.isError) {
+        return comparPassword
+      }
 
       return user.id
     } catch (err) {
@@ -96,7 +128,9 @@ export class User {
     }
   }
 
-  private async _registerValidation(): Promise<IResult | IRegisterValidation> {
+  private async _registerValidation(
+    EncryptPassword: EncryptPassword
+  ): Promise<IResult | IRegisterValidation> {
     const result: IResult = { message: "", isError: false, error: "" }
     const User = model("users")
     const { name, email, password } = this._req.body
@@ -105,8 +139,7 @@ export class User {
 
     try {
       if (user === null) {
-        const { encryptedUserPassword } =
-          this._EncryptPassword.encrypt(password)
+        const { encryptedUserPassword } = EncryptPassword.encrypt(password)
         const newUser = {
           name,
           email,

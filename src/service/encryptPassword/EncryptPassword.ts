@@ -13,8 +13,14 @@ export class EncryptPassword {
     const result: IResult = { message: "", isError: false, error: "" }
 
     try {
-      await bcryptjs.compare(userPassword, bancPassword)
+      const isEncrypted = await bcryptjs.compare(userPassword, bancPassword)
 
+      if (isEncrypted) {
+        return result
+      }
+
+      result.isError = true
+      result.error = "Email or password incorrect"
       return result
     } catch (err) {
       const error = err as Error

@@ -2,6 +2,17 @@ import type { Request, Response, NextFunction } from "express"
 import { verify } from "jsonwebtoken"
 import type { IResult } from "../../types"
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id?: string
+        refreshTokenID?: string
+      }
+    }
+  }
+}
+
 export class TokenAuthenticate {
   async accessTokenAuthenticate(
     req: Request,
@@ -19,8 +30,10 @@ export class TokenAuthenticate {
         }
 
         if (decodedToken.sub !== undefined) {
-          req.user = {
-            id: decodedToken.sub
+          if (req.user !== undefined) {
+            req.user = {
+              id: decodedToken.sub
+            }
           }
         }
 
