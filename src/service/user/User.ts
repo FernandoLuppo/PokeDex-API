@@ -53,6 +53,7 @@ export class User {
 
     try {
       const { id } = userId as { id: string }
+
       const loginTokenValidation = await TokenUser.loginAccessTokenValidation(
         id
       )
@@ -68,6 +69,20 @@ export class User {
       result.data = { accessToken, refreshToken }
       result.message = "User Logged with success"
 
+      return result
+    } catch (err) {
+      return handlingErrors(err)
+    }
+  }
+
+  async getUserInfos(): Promise<IResult> {
+    const result: IResult = { message: "", isError: false, error: "", data: {} }
+    const User = model("users")
+    const id = this._req.user?.id
+    const user = await User.findById(id)
+
+    try {
+      result.data = { name: user.name, email: user.email }
       return result
     } catch (err) {
       return handlingErrors(err)

@@ -42,4 +42,15 @@ export class UserController {
       })
       .send(resultWithoutData)
   }
+
+  async userInfos(): Promise<void> {
+    const result = await this._User.getUserInfos()
+
+    if (result.isError) {
+      this._res.status(400).send(result)
+      return
+    }
+
+    this._res.status(200).send(result)
+  }
 }

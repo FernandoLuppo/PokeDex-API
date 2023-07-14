@@ -1,8 +1,7 @@
 import express from "express"
 import cors from "cors"
 import cookieParser from "cookie-parser"
-import { userRouter } from "./routes"
-// import { tokenRouter } from "./routes/tokenRoutes"
+import { userRouter, tokenRouter } from "./routes"
 // import { pokemonRouter } from "./routes/pokemonRoutes"
 import "./types"
 import mongoose from "mongoose"
@@ -34,6 +33,6 @@ if (NODE_ENV === "development") {
 
 app.use("/user", userRouter)
 // app.use("/pokemon", pokemonRouter)
-// app.use("/token", tokenRouter)
+app.use("/token", tokenRouter)
 
 export { app }

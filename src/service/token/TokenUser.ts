@@ -1,9 +1,10 @@
-import type { Request } from "express"
+import type { Request, Response } from "express"
 import { model } from "mongoose"
 import "../../model/RefreshToken"
 import type { Token } from "./Token"
 import type { IResult } from "../../types"
 import { handlingErrors, isResult } from "../../utils"
+import { verify } from "jsonwebtoken"
 
 export class TokenUser {
   constructor(
@@ -61,6 +62,57 @@ export class TokenUser {
 
       await RefreshToken.updateOne({ userToken: id }, newRefreshToken)
       return { accessToken, refreshToken }
+    } catch (err) {
+      return handlingErrors(err)
+    }
+  }
+
+  async newTokens(res: Response): Promise<IResult> {
+    const result: IResult = { message: "", isError: false, error: "", data: {} }
+    const RefreshToken = model("refreshTokens")
+    const refreshToken = this._req.cookies["refreshToken"]
+
+    const { REFRESH_TOKEN } = process.env
+
+    if (refreshToken === null) {
+      result.isError = true
+      result.error = "Cookie is missing"
+      return result
+    }
+
+    if (REFRESH_TOKEN === undefined) {
+      result.isError = true
+      result.error = "Cookie is missing"
+      return result
+    }
+
+    const { sub } = verify(refreshToken, REFRESH_TOKEN) as { sub: string }
+    const refreshT = await RefreshToken.findOne({ userToken: sub })
+
+    try {
+      const id = refreshT.userToken.toString()
+
+      const accessTokenValues = this._Token.createAccessToken(id)
+      const refreshTokenValues = this._Token.createRefreshToken(id)
+
+      const { accessToken } = accessTokenValues as {
+        accessToken: string
+      }
+      const { refreshToken, refreshTokenExpiresDate } = refreshTokenValues as {
+        refreshToken: string
+        refreshTokenExpiresDate: Date
+      }
+      const newRefreshToken = {
+        refreshToken,
+        userToken: id,
+        expireDat: refreshTokenExpiresDate
+      }
+
+      res.clearCookie("accessToken").clearCookie("refreshToken")
+      await RefreshToken.updateOne({ userToken: sub }, newRefreshToken)
+      result.data = { accessToken, refreshToken }
+
+      return result
     } catch (err) {
       return handlingErrors(err)
     }

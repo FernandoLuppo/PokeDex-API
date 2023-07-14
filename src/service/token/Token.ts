@@ -15,7 +15,7 @@ export class Token {
 
     const accessToken = sign({}, ACCESS_TOKEN, {
       subject: id,
-      expiresIn: "60m"
+      expiresIn: "1m"
     })
 
     return { accessToken }

@@ -30,13 +30,13 @@ export class TokenAuthenticate {
         }
 
         if (decodedToken.sub !== undefined) {
-          if (req.user !== undefined) {
-            req.user = {
-              id: decodedToken.sub
-            }
+          req.user = {
+            id: decodedToken.sub
           }
         }
+
         next()
+        return
       }
 
       result.isError = true
@@ -70,7 +70,9 @@ export class TokenAuthenticate {
             id: decodedRefreshToken.sub
           }
         }
+
         next()
+        return
       }
 
       result.isError = true
