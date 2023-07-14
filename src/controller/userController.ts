@@ -31,7 +31,7 @@ export class UserController {
       return
     }
     this._res
-      .status(201)
+      .status(200)
       .cookie("accessToken", result.data.accessToken, {
         maxAge: 4.32e8,
         httpOnly: true

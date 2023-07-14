@@ -3,6 +3,7 @@ import { model } from "mongoose"
 import "../../model/RefreshToken"
 import type { Token } from "./Token"
 import type { IResult } from "../../types"
+import { isResult } from "../../utils"
 
 export class TokenUser {
   constructor(
@@ -13,7 +14,7 @@ export class TokenUser {
   async loginAccessTokenValidation(
     id: string
   ): Promise<IResult | { accessToken: string; refreshToken: string }> {
-    let result: IResult = { message: "", isError: false, error: "" }
+    const result: IResult = { message: "", isError: false, error: "" }
     const RefreshToken = model("refreshTokens")
     const { ACCESS_TOKEN, REFRESH_TOKEN } = process.env
 
@@ -31,31 +32,22 @@ export class TokenUser {
       const accessTokenValues = this._Token.createAccessToken(id)
       const refreshTokenValues = this._Token.createRefreshToken(id)
 
-      function isAccessToken(
-        accessTokenValues: IResult | { accessToken: string }
-      ): accessTokenValues is IResult {
-        return "isError" in accessTokenValues
+      if (isResult(accessTokenValues).isError) {
+        return isResult(accessTokenValues)
       }
 
-      function isRefreshToken(
-        refreshTokenValues:
-          | IResult
-          | { refreshToken: string; refreshTokenExpiresDate: Date }
-      ): refreshTokenValues is IResult {
-        return "isError" in refreshTokenValues
+      if (isResult(refreshTokenValues).isError) {
+        return isResult(refreshTokenValues)
       }
 
-      if (isAccessToken(accessTokenValues)) {
-        result = accessTokenValues
-        return result
+      const { accessToken } = accessTokenValues as {
+        accessToken: string
       }
-      if (isRefreshToken(refreshTokenValues)) {
-        result = refreshTokenValues
-        return result
+      const { refreshToken, refreshTokenExpiresDate } = refreshTokenValues as {
+        refreshToken: string
+        refreshTokenExpiresDate: Date
       }
 
-      const { accessToken } = accessTokenValues
-      const { refreshToken, refreshTokenExpiresDate } = refreshTokenValues
       const newRefreshToken = {
         refreshToken,
         userToken: id,

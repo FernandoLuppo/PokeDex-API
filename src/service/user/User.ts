@@ -5,6 +5,7 @@ import "../../model/Pokemon"
 import type { EncryptPassword } from "../encryptPassword/EncryptPassword"
 import type { IResult } from "../../types"
 import type { TokenUser } from "../token/TokenUser"
+import { isResult } from "../../utils"
 
 interface IRegisterValidation {
   name: string
@@ -16,21 +17,14 @@ export class User {
   constructor(private readonly _req: Request) {}
 
   async register(EncryptPassword: EncryptPassword): Promise<IResult> {
-    let result: IResult = { message: "", isError: false, error: "" }
+    const result: IResult = { message: "", isError: false, error: "" }
     const User = model("users")
     const Pokemon = model("pokemons")
 
     const newUser = await this._registerValidation(EncryptPassword)
 
-    function isIResult(
-      newUser: IResult | IRegisterValidation
-    ): newUser is IResult {
-      return "isError" in newUser
-    }
-
-    if (isIResult(newUser)) {
-      result = newUser
-      return result
+    if (isResult(newUser).isError) {
+      return isResult(newUser)
     }
 
     try {
@@ -53,34 +47,27 @@ export class User {
     TokenUser: TokenUser,
     EncryptPassword: EncryptPassword
   ): Promise<IResult> {
-    let result: IResult = { message: "", isError: false, error: "", data: {} }
+    const result: IResult = { message: "", isError: false, error: "", data: {} }
     const userId = await this._loginValidation(EncryptPassword)
 
-    function isIResult(data: string | IResult): data is IResult {
-      return typeof data !== "string"
-    }
-
-    if (isIResult(userId)) {
-      result = userId
-      return result
+    if (isResult(userId).isError) {
+      return isResult(userId)
     }
 
     try {
+      const { id } = userId as { id: string }
       const loginTokenValidation = await TokenUser.loginAccessTokenValidation(
-        userId
+        id
       )
 
-      function isIResult(
-        data: { accessToken: string; refreshToken: string } | IResult
-      ): data is IResult {
-        return "isError" in data
+      if (isResult(loginTokenValidation).isError) {
+        return isResult(loginTokenValidation)
       }
 
-      if (isIResult(loginTokenValidation)) {
-        result = loginTokenValidation
-        return result
+      const { accessToken, refreshToken } = loginTokenValidation as {
+        accessToken: string
+        refreshToken: string
       }
-      const { accessToken, refreshToken } = loginTokenValidation
       result.data = { accessToken, refreshToken }
       result.message = "User Logged with success"
 
@@ -95,7 +82,7 @@ export class User {
 
   private async _loginValidation(
     EncryptPassword: EncryptPassword
-  ): Promise<IResult | string> {
+  ): Promise<IResult | { id: string }> {
     const result: IResult = { message: "", isError: false, error: "" }
     const User = model("users")
     const { email, password } = this._req.body
@@ -119,7 +106,9 @@ export class User {
         return comparPassword
       }
 
-      return user.id
+      const id = user.id
+
+      return { id }
     } catch (err) {
       const error = err as Error
       result.isError = true
