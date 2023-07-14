@@ -3,7 +3,7 @@ import { model } from "mongoose"
 import "../../model/RefreshToken"
 import type { Token } from "./Token"
 import type { IResult } from "../../types"
-import { isResult } from "../../utils"
+import { handlingErrors, isResult } from "../../utils"
 
 export class TokenUser {
   constructor(
@@ -62,10 +62,7 @@ export class TokenUser {
       await RefreshToken.updateOne({ userToken: id }, newRefreshToken)
       return { accessToken, refreshToken }
     } catch (err) {
-      const error = err as Error
-      result.isError = true
-      result.error = error.message
-      return result
+      return handlingErrors(err)
     }
   }
 }

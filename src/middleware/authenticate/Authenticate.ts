@@ -24,7 +24,6 @@ export class Authenticate {
 
       result.isError = true
       result.error = errors
-
       res.status(401).send(result)
     }
   }
@@ -50,7 +49,6 @@ export class Authenticate {
 
       result.isError = true
       result.error = errors
-
       res.status(401).send(result)
     }
   }

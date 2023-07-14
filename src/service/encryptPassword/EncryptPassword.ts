@@ -1,5 +1,6 @@
 import bcryptjs from "bcrypt"
 import type { IResult } from "../../types"
+import { handlingErrors } from "../../utils"
 
 export class EncryptPassword {
   encrypt(userPassword: string): { encryptedUserPassword: string } {
@@ -23,10 +24,7 @@ export class EncryptPassword {
       result.error = "Email or password incorrect"
       return result
     } catch (err) {
-      const error = err as Error
-      result.isError = true
-      result.error = error.message
-      return result
+      return handlingErrors(err)
     }
   }
 }

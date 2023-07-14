@@ -5,7 +5,7 @@ import "../../model/Pokemon"
 import type { EncryptPassword } from "../encryptPassword/EncryptPassword"
 import type { IResult } from "../../types"
 import type { TokenUser } from "../token/TokenUser"
-import { isResult } from "../../utils"
+import { handlingErrors, isResult } from "../../utils"
 
 interface IRegisterValidation {
   name: string
@@ -36,10 +36,7 @@ export class User {
 
       return result
     } catch (err) {
-      const error = err as Error
-      result.isError = true
-      result.error = error.message
-      return result
+      return handlingErrors(err)
     }
   }
 
@@ -73,10 +70,36 @@ export class User {
 
       return result
     } catch (err) {
-      const error = err as Error
+      return handlingErrors(err)
+    }
+  }
+
+  private async _registerValidation(
+    EncryptPassword: EncryptPassword
+  ): Promise<IResult | IRegisterValidation> {
+    const result: IResult = { message: "", isError: false, error: "" }
+    const User = model("users")
+    const { name, email, password } = this._req.body
+
+    const user = await User.findOne({ email })
+
+    try {
+      if (user === null) {
+        const { encryptedUserPassword } = EncryptPassword.encrypt(password)
+        const newUser = {
+          name,
+          email,
+          password: encryptedUserPassword
+        }
+
+        return newUser
+      }
+
       result.isError = true
-      result.error = error.message
+      result.error = "User already exist!"
       return result
+    } catch (err) {
+      return handlingErrors(err)
     }
   }
 
@@ -110,42 +133,7 @@ export class User {
 
       return { id }
     } catch (err) {
-      const error = err as Error
-      result.isError = true
-      result.error = error.message
-      return result
-    }
-  }
-
-  private async _registerValidation(
-    EncryptPassword: EncryptPassword
-  ): Promise<IResult | IRegisterValidation> {
-    const result: IResult = { message: "", isError: false, error: "" }
-    const User = model("users")
-    const { name, email, password } = this._req.body
-
-    const user = await User.findOne({ email })
-
-    try {
-      if (user === null) {
-        const { encryptedUserPassword } = EncryptPassword.encrypt(password)
-        const newUser = {
-          name,
-          email,
-          password: encryptedUserPassword
-        }
-
-        return newUser
-      }
-
-      result.isError = true
-      result.error = "User already exist!"
-      return result
-    } catch (err) {
-      const error = err as Error
-      result.isError = true
-      result.error = error.message
-      return result
+      return handlingErrors(err)
     }
   }
 }
