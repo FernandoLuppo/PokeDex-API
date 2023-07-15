@@ -89,6 +89,28 @@ export class User {
     }
   }
 
+  async newUserInfos(): Promise<IResult> {
+    const result: IResult = { message: "", isError: false, error: "", data: {} }
+    const User = model("users")
+    const id = this._req.user?.id
+    const { name, email } = this._req.body
+    const newInfos = {
+      name,
+      email
+    }
+
+    try {
+      await User.updateOne({ id }, newInfos)
+      const { name, email } = await User.findById(id)
+
+      result.message = "User information has been updated"
+      result.data = { name, email }
+      return result
+    } catch (err) {
+      return handlingErrors(err)
+    }
+  }
+
   private async _registerValidation(
     EncryptPassword: EncryptPassword
   ): Promise<IResult | IRegisterValidation> {

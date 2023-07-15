@@ -48,4 +48,14 @@ userRouter.get(
   }
 )
 
+userRouter.post(
+  "/new-infos",
+  tokenAuthenticate.accessTokenAuthenticate,
+  authenticate.newUserInfos,
+  async (req: Request, res: Response) => {
+    const user = new User(req)
+    await new UserController(res, user).newUserInfos()
+  }
+)
+
 export { userRouter }
