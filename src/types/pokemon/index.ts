@@ -1,0 +1,6 @@
+export * from "./IPokemon"
+export * from "./IPokemonEvolutionChain"
+export * from "./IPokemonSpecie"
+export * from "./IPokemons"
+export * from "./methods/index"
+export * from "./user/index"

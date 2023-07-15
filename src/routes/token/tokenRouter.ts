@@ -8,7 +8,7 @@ const tokenRouter = Router()
 const token = new Token()
 const tokenAuthenticate = new TokenAuthenticate()
 
-tokenRouter.get(
+tokenRouter.put(
   "/new-token",
   tokenAuthenticate.refreshTokenAuthenticate,
   async (req: Request, res: Response) => {

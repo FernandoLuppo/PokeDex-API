@@ -48,7 +48,7 @@ userRouter.get(
   }
 )
 
-userRouter.post(
+userRouter.put(
   "/new-infos",
   tokenAuthenticate.accessTokenAuthenticate,
   authenticate.newUserInfos,

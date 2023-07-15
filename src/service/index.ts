@@ -1,3 +1,6 @@
 export * from "./user/User"
 export * from "./token/TokenUser"
 export * from "./token/Token"
+export * from "./pokemon/PokemonUser"
+export * from "./pokemon/PokemonApi"
+export * from "./pokemon/PokemonUrl"
