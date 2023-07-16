@@ -91,7 +91,12 @@ export class PokemonUser {
     const trainer = await Pokemon.findOne({ pokemonTrainer: userId })
 
     try {
-      await this._removePokemonValidation()
+      const removePokemonValidation = await this._removePokemonValidation()
+
+      if (isResult(removePokemonValidation).isError) {
+        return isResult(removePokemonValidation)
+      }
+
       const newTeam = trainer.pokeId.filter((num: number) => num !== pokemonId)
       await Pokemon.updateOne({ pokeId: newTeam })
       result.message = "Pokemon removed from team"
@@ -157,6 +162,7 @@ export class PokemonUser {
           isInTeam = true
           return isInTeam
         }
+
         isInTeam = false
         return isInTeam
       })
