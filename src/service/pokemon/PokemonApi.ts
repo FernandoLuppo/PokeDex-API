@@ -1,8 +1,5 @@
 import type {
-  IGetAll,
-  IGetEvolution,
   IGetEvolutionChain,
-  IGetOne,
   IGetPokemonInfos,
   IGetSpeciesInfos,
   IPokemon,
@@ -10,49 +7,84 @@ import type {
   IPokemonEvolutionChain,
   IPokemonMovies,
   IPokemonSpecies,
-  IPokemonTypes
+  IPokemonTypes,
+  IResult
 } from "../../types"
-import { pokemonEvolutionUrl } from "../../utils"
+import { handlingErrors, isResult, pokemonEvolutionUrl } from "../../utils"
 import type { PokemonUrl } from "./PokemonUrl"
 
 export class PokemonApi {
   constructor(private readonly _PokemonUrl: PokemonUrl) {}
 
-  async getAll(): Promise<IGetAll> {
-    const { data } = await this._PokemonUrl.getAll()
+  async getAll(): Promise<IResult> {
+    let result: IResult = { message: "", isError: false, error: "", data: {} }
+    const getAll = await this._PokemonUrl.getAll()
     const pokemonHome = []
 
-    for (const { name } of data.results) {
-      const dataPokemon = await this._PokemonUrl.getOne(name)
-      const { types, genericInfos } = await this._getPokemonInfos(dataPokemon)
-
-      pokemonHome.push({
-        type: types,
-        name: genericInfos.name,
-        id: genericInfos.id,
-        sprit: genericInfos.sprit
-      })
+    if (isResult(getAll).isError) {
+      result = getAll
+      return result
     }
-    return { pokemonHome }
+
+    for (const { name } of getAll.data.results) {
+      const dataPokemon = await this._PokemonUrl.getOne(name)
+      try {
+        if (isResult(dataPokemon).isError) {
+          result = dataPokemon
+          return result
+        }
+        const { types, genericInfos } = await this._getPokemonInfos(
+          dataPokemon.data
+        )
+
+        pokemonHome.push({
+          type: types,
+          name: genericInfos.name,
+          id: genericInfos.id,
+          sprit: genericInfos.sprit
+        })
+      } catch (err) {
+        return handlingErrors(err)
+      }
+    }
+
+    result.message = "List of pokemons uploaded successfully"
+    result.data = pokemonHome
+    return result
   }
 
-  async getOne(id: number | string): Promise<IGetOne> {
-    const dataPokemon = await this._PokemonUrl.getOne(id)
-    const dataSpecie = await this._PokemonUrl.getSpecie(id)
+  async getOne(id: number | string): Promise<IResult> {
+    let result: IResult = { message: "", isError: false, error: "", data: {} }
+    const pokemon = await this._PokemonUrl.getOne(id)
+    const specie = await this._PokemonUrl.getSpecie(id)
+
+    if (isResult(pokemon).isError) {
+      result = pokemon
+      return result
+    }
+    if (isResult(specie).isError) {
+      result = specie
+      return result
+    }
 
     const { pokemonMovie, pokemonStats, types, genericInfos } =
-      await this._getPokemonInfos(dataPokemon)
+      await this._getPokemonInfos(pokemon.data)
 
     const { description, evolutionChain } = await this._getSpeciesInfos(
-      dataSpecie
+      specie.data
     )
 
     const pokemonUrl = pokemonEvolutionUrl(evolutionChain)
+    const evolution = await this._PokemonUrl.getEvolutionChain(pokemonUrl)
 
-    const dataEvolution = await this._PokemonUrl.getEvolutionChain(pokemonUrl)
-    const { levels } = await this._getEvolutionChain(dataEvolution)
+    if (isResult(evolution).isError) {
+      result = evolution
+      return result
+    }
+    const { levels } = await this._getEvolutionChain(evolution.data)
 
-    return {
+    result.message = "Pokemon uploaded successfully"
+    result.data = {
       pokemonMovie,
       pokemonStats,
       types,
@@ -60,27 +92,41 @@ export class PokemonApi {
       levels,
       description
     }
+    return result
   }
 
-  async getEvolutions(id: number | string): Promise<IGetEvolution> {
-    const dataPokemon = await this._PokemonUrl.getOne(id)
-    const dataSpecie = await this._PokemonUrl.getSpecie(id)
+  async getEvolutions(id: number | string): Promise<IResult> {
+    let result: IResult = { message: "", isError: false, error: "", data: {} }
+    const pokemon = await this._PokemonUrl.getOne(id)
+    const specie = await this._PokemonUrl.getSpecie(id)
 
-    const { types, genericInfos } = await this._getPokemonInfos(dataPokemon)
+    if (isResult(pokemon).isError) {
+      result = pokemon
+      return result
+    }
+    if (isResult(specie).isError) {
+      result = specie
+      return result
+    }
 
-    const { evolutionChain } = await this._getSpeciesInfos(dataSpecie)
+    const { types, genericInfos } = await this._getPokemonInfos(pokemon.data)
+    const { evolutionChain } = await this._getSpeciesInfos(specie.data)
 
     const pokemonUrl = pokemonEvolutionUrl(evolutionChain)
+    const evolution = await this._PokemonUrl.getEvolutionChain(pokemonUrl)
 
-    const dataEvolution = await this._PokemonUrl.getEvolutionChain(pokemonUrl)
-    const { levels } = await this._getEvolutionChain(dataEvolution)
+    if (isResult(evolution).isError) {
+      result = evolution
+      return result
+    }
+    const { levels } = await this._getEvolutionChain(evolution.data)
 
-    return { types, genericInfos, levels }
+    result.data = { types, genericInfos, levels }
+    result.message = "Pokemon Evolution Chain uploaded successfully"
+    return result
   }
 
-  private async _getPokemonInfos({
-    data
-  }: IPokemon): Promise<IGetPokemonInfos> {
+  private async _getPokemonInfos(data: IPokemon): Promise<IGetPokemonInfos> {
     const pokemonMovie: IPokemonMovies[] = []
     const pokemonStats: IPokemonBaseStatus[] = []
     const types: IPokemonTypes[] = []
@@ -124,9 +170,9 @@ export class PokemonApi {
     return { pokemonMovie, pokemonStats, types, genericInfos }
   }
 
-  private async _getSpeciesInfos({
-    data
-  }: IPokemonSpecies): Promise<IGetSpeciesInfos> {
+  private async _getSpeciesInfos(
+    data: IPokemonSpecies
+  ): Promise<IGetSpeciesInfos> {
     let description: string = ""
     const evolutionChain = data.evolution_chain.url
 
@@ -140,9 +186,9 @@ export class PokemonApi {
     return { description, evolutionChain }
   }
 
-  private async _getEvolutionChain({
-    data
-  }: IPokemonEvolutionChain): Promise<{ levels: IGetEvolutionChain }> {
+  private async _getEvolutionChain(
+    data: IPokemonEvolutionChain
+  ): Promise<{ levels: IGetEvolutionChain }> {
     let levels: IGetEvolutionChain = {
       firstForm: {
         name: data.chain.species.name

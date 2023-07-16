@@ -12,18 +12,24 @@ export class PokemonUser {
   ) {}
 
   async userTeam(): Promise<IResult> {
-    const result: IResult = { message: "", isError: false, error: "", data: {} }
-    const { data } = await this._getTeam()
-    const teamPromise = data.map(async (pokemon: number) => {
+    let result: IResult = { message: "", isError: false, error: "", data: {} }
+    const getTeam = await this._getTeam()
+
+    if (isResult(getTeam).isError) {
+      result = getTeam
+      return result
+    }
+
+    const teamPromise = getTeam.data.map(async (pokemon: number) => {
       const infos = await this._PokemonApi.getOne(pokemon)
 
       const data = {
-        pokemonMovie: infos.pokemonMovie,
-        pokemonStats: infos.pokemonStats,
-        types: infos.types,
-        genericInfos: infos.genericInfos,
-        levels: infos.levels,
-        description: infos.description
+        pokemonMovie: infos.data.pokemonMovie,
+        pokemonStats: infos.data.pokemonStats,
+        types: infos.data.types,
+        genericInfos: infos.data.genericInfos,
+        levels: infos.data.levels,
+        description: infos.data.description
       }
 
       return {

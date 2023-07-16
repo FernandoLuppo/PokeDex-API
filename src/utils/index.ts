@@ -1,3 +1,2 @@
-export * from "./isResult"
-export * from "./handlingErrors"
-export * from "./pokemonEvolutionUrl"
+export * from "./errors"
+export * from "./pokemon"

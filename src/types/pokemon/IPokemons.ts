@@ -1,9 +1,7 @@
 export interface IPokemons {
-  data: {
-    results: [
-      {
-        name: string
-      }
-    ]
-  }
+  results: [
+    {
+      name: string
+    }
+  ]
 }

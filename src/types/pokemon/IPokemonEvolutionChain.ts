@@ -1,11 +1,9 @@
 export interface IPokemonEvolutionChain {
-  data: {
-    chain: {
-      species: {
-        name: string
-      }
-      evolves_to: IEvolutionLevel[]
+  chain: {
+    species: {
+      name: string
     }
+    evolves_to: IEvolutionLevel[]
   }
 }
 
