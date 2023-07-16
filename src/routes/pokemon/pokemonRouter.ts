@@ -2,11 +2,12 @@ import { Router } from "express"
 import type { Request, Response } from "express"
 import { PokemonController, TrainerController } from "../../controller/pokemon"
 import { PokemonApi, PokemonUrl, PokemonUser } from "../../service"
-import { TokenAuthenticate } from "../../middleware"
+import { Authenticate, TokenAuthenticate } from "../../middleware"
 
 const pokemonRouter = Router()
 const pokemonUrl = new PokemonUrl()
 const tokenAuthenticate = new TokenAuthenticate()
+const authenticate = new Authenticate()
 
 pokemonRouter.get("/get-all", async (req: Request, res: Response) => {
   const pokemonApi = new PokemonApi(pokemonUrl)
@@ -36,6 +37,7 @@ pokemonRouter.get(
 pokemonRouter.put(
   "/add",
   tokenAuthenticate.accessTokenAuthenticate,
+  authenticate.pokemonId,
   async (req: Request, res: Response) => {
     const pokemonApi = new PokemonApi(pokemonUrl)
     const pokemonUser = new PokemonUser(req, pokemonApi)
@@ -46,6 +48,7 @@ pokemonRouter.put(
 pokemonRouter.delete(
   "/remove",
   tokenAuthenticate.accessTokenAuthenticate,
+  authenticate.pokemonId,
   async (req: Request, res: Response) => {
     const pokemonApi = new PokemonApi(pokemonUrl)
     const pokemonUser = new PokemonUser(req, pokemonApi)
