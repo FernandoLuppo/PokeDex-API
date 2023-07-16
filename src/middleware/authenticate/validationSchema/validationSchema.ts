@@ -37,6 +37,24 @@ export const newInfosValidationSchema = yup.object().shape({
     .email("Email field must contain a valid email")
 })
 
-export const PokemonIdValidationSchema = yup.object().shape({
+export const pokemonIdValidationSchema = yup.object().shape({
   id: yup.number().required("Name field is required")
+})
+
+export const emailRecoverPasswordValidationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required("Email field is required")
+    .email("Email field must contain a valid email")
+})
+
+export const recoverPasswordValidationSchema = yup.object().shape({
+  password: yup
+    .string()
+    .required("Password field is required")
+    .min(5, "The Password field must be at least 5 characters long"),
+  email: yup
+    .string()
+    .required("Email field is required")
+    .email("Email field must contain a valid email")
 })

@@ -1,10 +1,12 @@
 import type * as yup from "yup"
 import type { Request, Response, NextFunction } from "express"
 import {
-  PokemonIdValidationSchema,
+  pokemonIdValidationSchema,
   loginValidationSchema,
   newInfosValidationSchema,
-  registerValidationSchema
+  registerValidationSchema,
+  emailRecoverPasswordValidationSchema,
+  recoverPasswordValidationSchema
 } from "./validationSchema/validationSchema"
 
 export class Authenticate {
@@ -88,9 +90,65 @@ export class Authenticate {
     const result = { message: "", isError: false, error: [""] }
 
     try {
-      await PokemonIdValidationSchema.validate(req.body, {
-        abortEarly: false
-      }).then(() => {})
+      await pokemonIdValidationSchema
+        .validate(req.body, {
+          abortEarly: false
+        })
+        .then(() => {})
+      next()
+    } catch (err) {
+      const errors: string[] = []
+
+      ;(err as yup.ValidationError).errors.forEach(error => {
+        errors.push(error)
+      })
+
+      result.isError = true
+      result.error = errors
+      res.status(401).send(result)
+    }
+  }
+
+  async emailRecoverPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const result = { message: "", isError: false, error: [""] }
+
+    try {
+      await emailRecoverPasswordValidationSchema
+        .validate(req.body, {
+          abortEarly: false
+        })
+        .then(() => {})
+      next()
+    } catch (err) {
+      const errors: string[] = []
+
+      ;(err as yup.ValidationError).errors.forEach(error => {
+        errors.push(error)
+      })
+
+      result.isError = true
+      result.error = errors
+      res.status(401).send(result)
+    }
+  }
+
+  async recoverPassword(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    const result = { message: "", isError: false, error: [""] }
+
+    try {
+      await recoverPasswordValidationSchema
+        .validate(req.body, {
+          abortEarly: false
+        })
+        .then(() => {})
       next()
     } catch (err) {
       const errors: string[] = []
