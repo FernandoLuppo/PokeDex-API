@@ -17,6 +17,7 @@ export class EncryptPassword {
       const isEncrypted = await bcryptjs.compare(userPassword, bancPassword)
 
       if (isEncrypted) {
+        result.message = "Successful password compare"
         return result
       }
 
