@@ -1,5 +1,5 @@
 const { resolve } = require("path")
-const root = resolve(__dirname, "../jest.config.js")
+const root = resolve(__dirname, "../../jest.config.js")
 const rootConfig = require(`${root}/jest.config.js`)
 
 module.exports = {

@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
-import User from "../src/models/User"
-import RefreshToken from "../src/models/RefreshToken"
-import Pokemon from "../src/models/Pokemon"
+import User from "../../src/model/User"
+import RefreshToken from "../../src/model/RefreshToken"
+import Pokemon from "../../src/model/Pokemon"
 
 beforeAll(async () => {
   if (mongoose.connection.readyState !== 1) {
