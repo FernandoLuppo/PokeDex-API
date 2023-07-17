@@ -1,5 +1,5 @@
-import * as dotenv from "dotenv"
 import { Axios } from "../../../../src/service/axios/Axios"
+import * as dotenv from "dotenv"
 dotenv.config()
 
 describe("Axios.ts", () => {
