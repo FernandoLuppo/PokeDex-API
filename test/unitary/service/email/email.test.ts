@@ -1,6 +1,6 @@
 import { Email } from "../../../../src/service"
-import * as dotenv from "dotenv"
 import { mockEmail } from "../../mock"
+import * as dotenv from "dotenv"
 dotenv.config()
 
 describe("Email.ts", () => {
