@@ -4,7 +4,7 @@ import { handlingErrors, isResult } from "../../utils"
 import type { IResult } from "../../types"
 
 export class Email {
-  recoverPassword(recipient: string, code: number[]): IResult {
+  async recoverPassword(recipient: string, code: number[]): Promise<IResult> {
     const result = { message: "", isError: false, error: "", data: {} }
     const recoverPasswordConfig = this._recoverPasswordConfig()
 
@@ -18,15 +18,14 @@ export class Email {
       code
     )
 
-    recoverPasswordConfig.data.transporter.sendMail(template, (err: Error) => {
-      console.log(err)
+    try {
+      await recoverPasswordConfig.data.transporter.sendMail(template)
 
-      if (err !== null) {
-        return handlingErrors(err)
-      }
-    })
-
-    return result
+      result.message = "Email successfully sent"
+      return result
+    } catch (err) {
+      return handlingErrors(err)
+    }
   }
 
   private _recoverPasswordConfig(): IResult {
