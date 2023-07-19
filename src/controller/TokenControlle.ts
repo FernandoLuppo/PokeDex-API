@@ -8,13 +8,16 @@ export class TokenController {
   ) {}
 
   async sendNewTokens(): Promise<void> {
-    const result = await this._TokenUser.newTokens(this._res)
+    const result = await this._TokenUser.newTokens()
     const { data, ...resultWithoutData } = result
 
     if (result.isError) {
       this._res.status(401).send(result)
       return
     }
+
+    this._res.clearCookie("accessToken").clearCookie("refreshToken")
+
     this._res
       .status(200)
       .cookie("accessToken", result.data.accessToken, {

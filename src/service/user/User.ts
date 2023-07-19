@@ -53,7 +53,6 @@ export class User {
 
     try {
       const { id } = userId as { id: string }
-
       const loginTokenValidation = await TokenUser.loginAccessTokenValidation(
         id
       )
@@ -62,13 +61,8 @@ export class User {
         return isResult(loginTokenValidation)
       }
 
-      const { accessToken, refreshToken } = loginTokenValidation as {
-        accessToken: string
-        refreshToken: string
-      }
-      result.data = { accessToken, refreshToken }
+      result.data = loginTokenValidation.data
       result.message = "User Logged with success"
-
       return result
     } catch (err) {
       return handlingErrors(err)
@@ -82,7 +76,14 @@ export class User {
     const user = await User.findById(id)
 
     try {
+      if (user === null) {
+        result.isError = true
+        result.error = "User undefined"
+        return result
+      }
+
       result.data = { name: user.name, email: user.email }
+      result.message = "User information load with success"
       return result
     } catch (err) {
       return handlingErrors(err)

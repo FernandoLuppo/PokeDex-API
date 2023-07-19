@@ -1,4 +1,4 @@
-import type { Request, Response } from "express"
+import type { Request } from "express"
 import { model } from "mongoose"
 import "../../model/RefreshToken"
 import type { Token } from "./Token"
@@ -12,9 +12,7 @@ export class TokenUser {
     private readonly _Token: Token
   ) {}
 
-  async loginAccessTokenValidation(
-    id: string
-  ): Promise<IResult | { accessToken: string; refreshToken: string }> {
+  async loginAccessTokenValidation(id: string): Promise<IResult> {
     const result: IResult = { message: "", isError: false, error: "" }
     const RefreshToken = model("refreshTokens")
     const { ACCESS_TOKEN, REFRESH_TOKEN } = process.env
@@ -57,17 +55,22 @@ export class TokenUser {
 
       if (refreshT === null) {
         await new RefreshToken(newRefreshToken).save()
-        return { accessToken, refreshToken }
+        result.message = "Tokens create with success"
+        result.data = { accessToken, refreshToken }
+        return result
       }
 
       await RefreshToken.updateOne({ userToken: id }, newRefreshToken)
-      return { accessToken, refreshToken }
+
+      result.message = "Tokens create with success"
+      result.data = { accessToken, refreshToken }
+      return result
     } catch (err) {
       return handlingErrors(err)
     }
   }
 
-  async newTokens(res: Response): Promise<IResult> {
+  async newTokens(): Promise<IResult> {
     const result: IResult = { message: "", isError: false, error: "", data: {} }
     const RefreshToken = model("refreshTokens")
     const refreshToken = this._req.cookies["refreshToken"]
@@ -108,10 +111,9 @@ export class TokenUser {
         expireDat: refreshTokenExpiresDate
       }
 
-      res.clearCookie("accessToken").clearCookie("refreshToken")
       await RefreshToken.updateOne({ userToken: sub }, newRefreshToken)
+      result.message = "New tokens create with success"
       result.data = { accessToken, refreshToken }
-
       return result
     } catch (err) {
       return handlingErrors(err)
