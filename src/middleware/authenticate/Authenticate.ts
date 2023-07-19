@@ -18,6 +18,8 @@ export class Authenticate {
         abortEarly: false
       })
 
+      console.log("ola")
+
       next()
     } catch (err) {
       const errors: string[] = []
