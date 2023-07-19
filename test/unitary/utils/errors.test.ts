@@ -1,4 +1,4 @@
-import { IResult } from "../../../src/types"
+import type { IResult } from "../../../src/types"
 import { handlingErrors, isResult } from "../../../src/utils"
 
 describe("errors.ts", () => {
