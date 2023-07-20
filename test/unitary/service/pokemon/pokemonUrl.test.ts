@@ -1,15 +1,13 @@
 import { PokemonUrl } from "../../../../src/service"
 import * as dotenv from "dotenv"
-import { mockPokemonUrl } from "../../mock/mockPokemonUrl"
 dotenv.config()
 
 describe("PokemonUrl.ts", () => {
-  mockPokemonUrl()
-
   describe("getAll", () => {
     it("Should get a list o pokemon", async () => {
       const url = new PokemonUrl()
       const result = await url.getAll()
+      console.log(result)
 
       expect(result.isError).toBe(false)
       expect(result.data).toBeDefined()
