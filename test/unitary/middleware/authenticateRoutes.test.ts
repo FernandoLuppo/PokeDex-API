@@ -1,7 +1,14 @@
 import { response } from "express"
 import { Authenticate } from "../../../src/middleware"
 import { mockReq } from "../mock"
-import { loginValidationSchema } from "../../../src/middleware/authenticate/validationSchema/validationSchema"
+import {
+  loginValidationSchema,
+  registerValidationSchema,
+  newInfosValidationSchema,
+  pokemonIdValidationSchema,
+  emailRecoverPasswordValidationSchema,
+  recoverPasswordValidationSchema
+} from "../../../src/middleware/authenticate/validationSchema/validationSchema"
 
 describe("Authenticate.ts", () => {
   describe("login", () => {
@@ -25,7 +32,9 @@ describe("Authenticate.ts", () => {
       const res = response
       const next = jest.fn()
 
-      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+      jest
+        .spyOn(registerValidationSchema, "validate")
+        .mockResolvedValue({} as any)
 
       const authenticate = new Authenticate()
       await authenticate.register(req, res, next)
@@ -40,7 +49,9 @@ describe("Authenticate.ts", () => {
       const res = response
       const next = jest.fn()
 
-      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+      jest
+        .spyOn(newInfosValidationSchema, "validate")
+        .mockResolvedValue({} as any)
 
       const authenticate = new Authenticate()
       await authenticate.newUserInfos(req, res, next)
@@ -56,7 +67,9 @@ describe("Authenticate.ts", () => {
       const res = response
       const next = jest.fn()
 
-      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+      jest
+        .spyOn(pokemonIdValidationSchema, "validate")
+        .mockResolvedValue({} as any)
 
       const authenticate = new Authenticate()
       await authenticate.pokemonId(req, res, next)
@@ -71,7 +84,9 @@ describe("Authenticate.ts", () => {
       const res = response
       const next = jest.fn()
 
-      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+      jest
+        .spyOn(emailRecoverPasswordValidationSchema, "validate")
+        .mockResolvedValue({} as any)
 
       const authenticate = new Authenticate()
       await authenticate.emailRecoverPassword(req, res, next)
@@ -86,7 +101,9 @@ describe("Authenticate.ts", () => {
       const res = response
       const next = jest.fn()
 
-      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+      jest
+        .spyOn(recoverPasswordValidationSchema, "validate")
+        .mockResolvedValue({} as any)
 
       const authenticate = new Authenticate()
       await authenticate.newUserInfos(req, res, next)
