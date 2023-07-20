@@ -15,7 +15,7 @@ export class TrainerController {
       return
     }
 
-    this._res.status(201).send(result)
+    this._res.status(200).send(result)
   }
 
   async addPokemon(): Promise<void> {
@@ -26,7 +26,7 @@ export class TrainerController {
       return
     }
 
-    this._res.status(201).send(result)
+    this._res.status(200).send(result)
   }
 
   async removePokemon(): Promise<void> {
@@ -37,6 +37,6 @@ export class TrainerController {
       return
     }
 
-    this._res.status(201).send(result)
+    this._res.status(200).send(result)
   }
 }

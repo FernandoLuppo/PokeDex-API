@@ -11,11 +11,11 @@ export class RecoverPasswordController {
     const result = await this._RecoverPassword.checkEmail()
 
     if (result.isError) {
-      this._res.status(400).send(result)
+      this._res.status(401).send(result)
       return
     }
 
-    this._res.status(201).send(result)
+    this._res.status(200).send(result)
   }
 
   async newPassword(EncryptPassword: EncryptPassword): Promise<void> {
@@ -26,6 +26,6 @@ export class RecoverPasswordController {
       return
     }
 
-    this._res.status(201).send(result)
+    this._res.status(200).send(result)
   }
 }

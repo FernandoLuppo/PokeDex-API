@@ -15,7 +15,7 @@ export class PokemonController {
       return
     }
 
-    this._res.status(201).send(result)
+    this._res.status(200).send(result)
   }
 
   async getOne(id: string | number): Promise<void> {
@@ -26,7 +26,7 @@ export class PokemonController {
       return
     }
 
-    this._res.status(201).send(result)
+    this._res.status(200).send(result)
   }
 
   async getEvolution(id: string | number): Promise<void> {
@@ -37,6 +37,6 @@ export class PokemonController {
       return
     }
 
-    this._res.status(201).send(result)
+    this._res.status(200).send(result)
   }
 }

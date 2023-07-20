@@ -18,10 +18,10 @@ export class Authenticate {
         abortEarly: false
       })
 
-      console.log("ola")
-
       next()
     } catch (err) {
+      console.log(err)
+
       const errors: string[] = []
 
       ;(err as yup.ValidationError).errors.forEach(error => {

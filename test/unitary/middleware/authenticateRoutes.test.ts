@@ -1,31 +1,97 @@
+import { response } from "express"
+import { Authenticate } from "../../../src/middleware"
+import { mockReq } from "../mock"
+import { loginValidationSchema } from "../../../src/middleware/authenticate/validationSchema/validationSchema"
+
 describe("Authenticate.ts", () => {
   describe("login", () => {
-    it("Should be able to cross the log authentication method normally", async () => {})
-    it("Should return a error when try authentication with login method", async () => {})
+    it("Should be able to cross the log authentication method normally", async () => {
+      const req = mockReq()
+      const res = response
+      const next = jest.fn()
+
+      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+
+      const authenticate = new Authenticate()
+      await authenticate.login(req, res, next)
+
+      expect(next).toHaveBeenCalled()
+    })
   })
 
   describe("register", () => {
-    it("Should be able to cross the register authentication method normally", async () => {})
-    it("Should return a error when try authentication with register method", async () => {})
+    it("Should be able to cross the register authentication method normally", async () => {
+      const req = mockReq()
+      const res = response
+      const next = jest.fn()
+
+      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+
+      const authenticate = new Authenticate()
+      await authenticate.register(req, res, next)
+
+      expect(next).toHaveBeenCalled()
+    })
   })
 
   describe("newUserInfos", () => {
-    it("Should be able to cross the newUserInfos authentication method normally", async () => {})
-    it("Should return a error when try authentication with newUserInfos method", async () => {})
+    it("Should be able to cross the newUserInfos authentication method normally", async () => {
+      const req = mockReq()
+      const res = response
+      const next = jest.fn()
+
+      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+
+      const authenticate = new Authenticate()
+      await authenticate.newUserInfos(req, res, next)
+
+      expect(next).toHaveBeenCalled()
+    })
   })
 
   describe("pokemonId", () => {
-    it("Should be able to cross the pokemonId authentication method normally", async () => {})
-    it("Should return a error when try authentication with pokemonId method", async () => {})
+    it("Should be able to cross the pokemonId authentication method normally", async () => {
+      const req = mockReq()
+      req.body = { id: 1 }
+      const res = response
+      const next = jest.fn()
+
+      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+
+      const authenticate = new Authenticate()
+      await authenticate.pokemonId(req, res, next)
+
+      expect(next).toHaveBeenCalled()
+    })
   })
 
   describe("emailRecoverPassword", () => {
-    it("Should be able to cross the emailRecoverPassword authentication method normally", async () => {})
-    it("Should return a error when try authentication with emailRecoverPassword method", async () => {})
+    it("Should be able to cross the emailRecoverPassword authentication method normally", async () => {
+      const req = mockReq()
+      const res = response
+      const next = jest.fn()
+
+      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+
+      const authenticate = new Authenticate()
+      await authenticate.emailRecoverPassword(req, res, next)
+
+      expect(next).toHaveBeenCalled()
+    })
   })
 
   describe("recoverPassword", () => {
-    it("Should be able to cross the recoverPassword authentication method normally", async () => {})
-    it("Should return a error when try authentication with recoverPassword method", async () => {})
+    it("Should be able to cross the recoverPassword authentication method normally", async () => {
+      const req = mockReq()
+      const res = response
+      const next = jest.fn()
+
+      jest.spyOn(loginValidationSchema, "validate").mockResolvedValue({} as any)
+
+      const authenticate = new Authenticate()
+      await authenticate.newUserInfos(req, res, next)
+
+      expect(next).toHaveBeenCalled()
+    })
   })
 })
