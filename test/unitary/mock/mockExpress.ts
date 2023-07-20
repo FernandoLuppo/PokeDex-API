@@ -30,6 +30,21 @@ export const mockReqId = (id: string): Request => {
   return req as Request
 }
 
+export const mockReqAccessToken = (accessToken: string): Request => {
+  const req = {
+    body: {
+      name: "Fernando Luppo",
+      email: "fernandoluppo2@gmail.com",
+      password: "12345"
+    },
+    cookies: {
+      accessToken
+    }
+  }
+
+  return req as Request
+}
+
 export const mockReqRefreshToken = (refreshToken: string): Request => {
   const req = {
     body: {
@@ -38,8 +53,7 @@ export const mockReqRefreshToken = (refreshToken: string): Request => {
       password: "12345"
     },
     cookies: {
-      refreshToken,
-      accessToken: "ola"
+      refreshToken
     }
   }
 
