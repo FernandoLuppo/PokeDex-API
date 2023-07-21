@@ -5,7 +5,6 @@ import {
   mockRegister,
   mockReq,
   mockReqError,
-  mockReqId,
   mockUserID
 } from "../../mock"
 import * as dotenv from "dotenv"
@@ -14,7 +13,7 @@ dotenv.config()
 describe("User.ts", () => {
   describe("register", () => {
     it("Should register a new user", async () => {
-      const req = mockReq()
+      const req = mockReq(null)
       const register = await mockRegister(req)
 
       expect(register.message).toBe("User registered with success")
@@ -22,7 +21,7 @@ describe("User.ts", () => {
     })
 
     it("Should return a error when try to register a new user", async () => {
-      const req = mockReq()
+      const req = mockReq(null)
       await mockRegister(req)
       const result = await mockRegister(req)
 
@@ -32,7 +31,7 @@ describe("User.ts", () => {
   })
   describe("login", () => {
     it("Should be able to do the login normally", async () => {
-      const req = mockReq()
+      const req = mockReq(null)
       const login = await mockLogin(req)
 
       expect(login.message).toBe("User Logged with success")
@@ -53,8 +52,7 @@ describe("User.ts", () => {
 
   describe("getUserInfos", () => {
     it("Should be able to load user information", async () => {
-      const id = await mockUserID()
-      const req = mockReqId(id)
+      const req = await mockUserID()
 
       const userInfos = await mockGetUserInfos(req)
 
@@ -75,8 +73,7 @@ describe("User.ts", () => {
   })
   describe("newUserInfos", () => {
     it("Should be able to update user information", async () => {
-      const id = await mockUserID()
-      const req = mockReqId(id)
+      const req = await mockUserID()
       const userInfos = await mockNewUserInfos(req)
 
       expect(userInfos.message).toBe("User information has been updated")

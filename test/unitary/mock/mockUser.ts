@@ -36,12 +36,12 @@ export const mockNewUserInfos = async (req: Request): Promise<IResult> => {
   return result
 }
 
-export const mockUserID = async (): Promise<string> => {
-  const req = mockReq()
+export const mockUserID = async (): Promise<Request> => {
+  const req = mockReq(null)
   await mockRegister(req)
   const User = model("users")
   const user = await User.find()
   const id: string = user[0].id
 
-  return id
+  return mockReq({ userId: id })
 }

@@ -1,26 +1,19 @@
 import { model } from "mongoose"
 import { Token, TokenUser } from "../../../../src/service"
-import {
-  mockLogin,
-  mockRegister,
-  mockReq,
-  mockReqId,
-  mockReqRefreshToken,
-  mockUserID
-} from "../../mock"
+import { mockLogin, mockRegister, mockReq, mockUserID } from "../../mock"
 import * as dotenv from "dotenv"
 dotenv.config()
 
 describe("TokenUser.ts", () => {
   describe("loginAccessTokenValidation", () => {
     it("Should make login correctly and save the tokens to user", async () => {
-      const id = await mockUserID()
-      const req = mockReqId(id)
+      const req = await mockUserID()
+      const id = req.user?.id
 
       const token = new Token()
       const tokenUser = new TokenUser(req, token)
 
-      const result = await tokenUser.loginAccessTokenValidation(id)
+      const result = await tokenUser.loginAccessTokenValidation(id as string)
 
       expect(result.data).toBeDefined()
       expect(result.data).toHaveProperty("accessToken")
@@ -31,13 +24,13 @@ describe("TokenUser.ts", () => {
       const originalEnv = process.env
       process.env = { ...originalEnv, ACCESS_TOKEN: undefined }
 
-      const id = await mockUserID()
-      const req = mockReqId(id)
+      const req = await mockUserID()
+      const id = req.user?.id
 
       const token = new Token()
       const tokenUser = new TokenUser(req, token)
 
-      const result = await tokenUser.loginAccessTokenValidation(id)
+      const result = await tokenUser.loginAccessTokenValidation(id as string)
 
       expect(result.isError).toBe(true)
       expect(result.error).toBe("Token Undefined")
@@ -47,7 +40,7 @@ describe("TokenUser.ts", () => {
   })
   describe("newTokens", () => {
     it("Should create new tokens when the original access token was expired", async () => {
-      const req = mockReq()
+      const req = await mockUserID()
       await mockRegister(req)
       await mockLogin(req)
 
@@ -55,7 +48,7 @@ describe("TokenUser.ts", () => {
       const userRefreshToken = await RefreshToken.find()
       const refreshToken = userRefreshToken[0].refreshToken
 
-      const reqRefreshToken = mockReqRefreshToken(refreshToken)
+      const reqRefreshToken = mockReq({ refreshToken })
       const token = new Token()
       const tokenUser = new TokenUser(reqRefreshToken, token)
       const newTokens = await tokenUser.newTokens()
@@ -71,7 +64,7 @@ describe("TokenUser.ts", () => {
       const originalEnv = process.env
       process.env = { ...originalEnv, REFRESH_TOKEN: undefined }
 
-      const req = mockReq()
+      const req = mockReq(null)
       await mockRegister(req)
       await mockLogin(req)
 
@@ -79,7 +72,7 @@ describe("TokenUser.ts", () => {
       const userRefreshToken = await RefreshToken.find()
       const refreshToken = userRefreshToken[0].refreshToken
 
-      const reqRefreshToken = mockReqRefreshToken(refreshToken)
+      const reqRefreshToken = mockReq({ refreshToken })
       const token = new Token()
       const tokenUser = new TokenUser(reqRefreshToken, token)
       const newTokens = await tokenUser.newTokens()

@@ -1,59 +1,26 @@
 import type { Request } from "express"
 
-export const mockReq = (): Request => {
-  const req = {
-    body: {
-      name: "Fernando Luppo",
-      email: "fernandoluppo2@gmail.com",
-      password: "12345"
-    }
-  }
-
-  return req as Request
+interface IMockReq {
+  userId?: string
+  pokemonId?: string
+  accessToken?: string
+  refreshToken?: string
 }
 
-export const mockReqId = (id: string): Request => {
+export const mockReq = (data: IMockReq | null): Request => {
   const req = {
     body: {
       name: "Fernando Luppo",
       email: "fernandoluppo2@gmail.com",
-      password: "12345"
+      password: "12345",
+      id: data?.pokemonId
     },
     user: {
-      id
+      id: data?.userId
     },
     cookies: {
-      refreshToken: ""
-    }
-  }
-
-  return req as Request
-}
-
-export const mockReqAccessToken = (accessToken: string): Request => {
-  const req = {
-    body: {
-      name: "Fernando Luppo",
-      email: "fernandoluppo2@gmail.com",
-      password: "12345"
-    },
-    cookies: {
-      accessToken
-    }
-  }
-
-  return req as Request
-}
-
-export const mockReqRefreshToken = (refreshToken: string): Request => {
-  const req = {
-    body: {
-      name: "Fernando Luppo",
-      email: "fernandoluppo2@gmail.com",
-      password: "12345"
-    },
-    cookies: {
-      refreshToken
+      accessToken: data?.accessToken,
+      refreshToken: data?.refreshToken
     }
   }
 
@@ -62,10 +29,7 @@ export const mockReqRefreshToken = (refreshToken: string): Request => {
 
 export const mockReqError = (): Request => {
   const req = {
-    body: {
-      name: "",
-      password: ""
-    }
+    body: {}
   }
 
   return req as Request
