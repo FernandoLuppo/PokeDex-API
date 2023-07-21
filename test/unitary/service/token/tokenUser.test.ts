@@ -7,11 +7,13 @@ dotenv.config()
 describe("TokenUser.ts", () => {
   describe("loginAccessTokenValidation", () => {
     it("Should make login correctly and save the tokens to user", async () => {
-      const req = await mockUserID()
-      const id = req.user?.id
+      const req = mockReq(null)
+      await mockRegister(req)
+      const newReq = await mockUserID(req)
+      const id = newReq.user?.id
 
       const token = new Token()
-      const tokenUser = new TokenUser(req, token)
+      const tokenUser = new TokenUser(newReq, token)
 
       const result = await tokenUser.loginAccessTokenValidation(id as string)
 
@@ -24,11 +26,13 @@ describe("TokenUser.ts", () => {
       const originalEnv = process.env
       process.env = { ...originalEnv, ACCESS_TOKEN: undefined }
 
-      const req = await mockUserID()
-      const id = req.user?.id
+      const req = mockReq(null)
+      await mockRegister(req)
+      const newReq = await mockUserID(req)
+      const id = newReq.user?.id
 
       const token = new Token()
-      const tokenUser = new TokenUser(req, token)
+      const tokenUser = new TokenUser(newReq, token)
 
       const result = await tokenUser.loginAccessTokenValidation(id as string)
 
@@ -40,9 +44,11 @@ describe("TokenUser.ts", () => {
   })
   describe("newTokens", () => {
     it("Should create new tokens when the original access token was expired", async () => {
-      const req = await mockUserID()
+      const req = mockReq(null)
       await mockRegister(req)
-      await mockLogin(req)
+      const newReq = await mockUserID(req)
+      await mockRegister(newReq)
+      await mockLogin(newReq)
 
       const RefreshToken = model("refreshTokens")
       const userRefreshToken = await RefreshToken.find()

@@ -1,8 +1,6 @@
 import type { Request } from "express"
 import { EncryptPassword, Token, TokenUser, User } from "../../../src/service"
 import type { IResult } from "../../../src/types"
-import { mockReq } from "./mockExpress"
-import { model } from "mongoose"
 
 export const mockRegister = async (req: Request): Promise<IResult> => {
   const user = new User(req)
@@ -34,14 +32,4 @@ export const mockNewUserInfos = async (req: Request): Promise<IResult> => {
   const result = await user.newUserInfos()
 
   return result
-}
-
-export const mockUserID = async (): Promise<Request> => {
-  const req = mockReq(null)
-  await mockRegister(req)
-  const User = model("users")
-  const user = await User.find()
-  const id: string = user[0].id
-
-  return mockReq({ userId: id })
 }

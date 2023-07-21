@@ -1,8 +1,10 @@
 import type { Request } from "express"
+import { mockLogin } from "./mockUser"
+import { model } from "mongoose"
 
 interface IMockReq {
   userId?: string
-  pokemonId?: string
+  pokemonId?: number
   accessToken?: string
   refreshToken?: string
 }
@@ -33,4 +35,13 @@ export const mockReqError = (): Request => {
   }
 
   return req as Request
+}
+
+export const mockUserID = async (req: Request): Promise<Request> => {
+  await mockLogin(req)
+  const User = model("users")
+  const user = await User.find()
+  const id: string = user[0].id
+
+  return mockReq({ userId: id })
 }

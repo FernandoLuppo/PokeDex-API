@@ -52,9 +52,11 @@ describe("User.ts", () => {
 
   describe("getUserInfos", () => {
     it("Should be able to load user information", async () => {
-      const req = await mockUserID()
+      const req = mockReq(null)
+      await mockRegister(req)
+      const newReq = await mockUserID(req)
 
-      const userInfos = await mockGetUserInfos(req)
+      const userInfos = await mockGetUserInfos(newReq)
 
       expect(userInfos.message).toBe("User information load with success")
       expect(userInfos.isError).toBe(false)
@@ -73,8 +75,10 @@ describe("User.ts", () => {
   })
   describe("newUserInfos", () => {
     it("Should be able to update user information", async () => {
-      const req = await mockUserID()
-      const userInfos = await mockNewUserInfos(req)
+      const req = mockReq(null)
+      await mockRegister(req)
+      const newReq = await mockUserID(req)
+      const userInfos = await mockNewUserInfos(newReq)
 
       expect(userInfos.message).toBe("User information has been updated")
       expect(userInfos.isError).toBe(false)
