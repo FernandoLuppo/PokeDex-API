@@ -1,34 +1,32 @@
+import type { Request } from "express"
 import { PokemonApi, PokemonUrl, PokemonUser } from "../../../src/service"
 import type { IResult } from "../../../src/types"
-import { mockReq, mockUserID } from "./mockExpress"
-import { mockRegister } from "./mockUser"
 
 export const mockAddPokemon = async (
-  pokemonId: number | null
+  pokemonId: number,
+  req: Request
 ): Promise<IResult> => {
-  const req = mockReq(null)
-  await mockRegister(req)
-  const newReq = await mockUserID(req)
-  newReq.body.id = pokemonId
+  req.body.id = pokemonId
 
   const url = new PokemonUrl()
   const api = new PokemonApi(url)
-  const pokemon = new PokemonUser(newReq, api)
+  const pokemon = new PokemonUser(req, api)
 
   return await pokemon.addPokemon()
 }
 
-export const mockRemovePokemon = async (
-  pokemonId: number
-): Promise<IResult> => {
-  const req = mockReq(null)
-  await mockRegister(req)
-  const newReq = await mockUserID(req)
-  newReq.body.id = pokemonId
-
+export const mockRemovePokemon = async (req: any): Promise<IResult> => {
   const url = new PokemonUrl()
   const api = new PokemonApi(url)
-  const pokemon = new PokemonUser(newReq, api)
+  const pokemon = new PokemonUser(req, api)
 
   return await pokemon.removePokemon()
+}
+
+export const mockGetTeam = async (req: Request): Promise<IResult> => {
+  const url = new PokemonUrl()
+  const api = new PokemonApi(url)
+  const pokemon = new PokemonUser(req, api)
+
+  return await pokemon.userTeam()
 }

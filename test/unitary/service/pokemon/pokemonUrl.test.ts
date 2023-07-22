@@ -7,7 +7,6 @@ describe("PokemonUrl.ts", () => {
     it("Should get a list o pokemon", async () => {
       const url = new PokemonUrl()
       const result = await url.getAll()
-      console.log(result)
 
       expect(result.isError).toBe(false)
       expect(result.data).toBeDefined()

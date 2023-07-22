@@ -20,8 +20,6 @@ export class Authenticate {
 
       next()
     } catch (err) {
-      console.log(err)
-
       const errors: string[] = []
 
       ;(err as yup.ValidationError).errors.forEach(error => {

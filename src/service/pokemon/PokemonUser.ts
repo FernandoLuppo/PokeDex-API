@@ -136,6 +136,8 @@ export class PokemonUser {
         }
       })
 
+      await this._PokemonApi.getOne(pokemonId)
+
       return result
     } catch (err) {
       return handlingErrors(err)
@@ -167,7 +169,7 @@ export class PokemonUser {
         return isInTeam
       })
 
-      if (isInTeam === false) {
+      if (isInTeam !== true) {
         result.isError = true
         result.error = "This pokemon is not part of your team"
         return result
