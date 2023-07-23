@@ -62,7 +62,7 @@ export class User {
       }
 
       result.data = loginTokenValidation.data
-      result.message = "User Logged with success"
+      result.message = "User logged with success"
       return result
     } catch (err) {
       return handlingErrors(err)

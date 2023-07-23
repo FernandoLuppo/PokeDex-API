@@ -7,6 +7,9 @@ beforeAll(async () => {
   if (mongoose.connection.readyState !== 1) {
     await mongoose.connect("mongodb://localhost/PokemonTest")
   }
+})
+
+beforeEach(async () => {
   await Pokemon.deleteMany({})
   await RefreshToken.deleteMany({})
   await User.deleteMany({})
