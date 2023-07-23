@@ -1,5 +1,5 @@
 import { Token } from "../../../src/service"
-import { mockReqAccessToken, mockReqRefreshToken } from "../mock"
+import { mockReq } from "../mock"
 import { TokenAuthenticate } from "../../../src/middleware"
 import * as dotenv from "dotenv"
 import { response } from "express"
@@ -14,7 +14,7 @@ describe("tokenAuthenticate.ts", () => {
       const { accessToken } = accessTokenValue as {
         accessToken: string
       }
-      const req = mockReqAccessToken(accessToken)
+      const req = mockReq({ accessToken })
 
       const res = response
       const next = jest.fn()
@@ -35,7 +35,7 @@ describe("tokenAuthenticate.ts", () => {
       const { refreshToken } = refreshTokenValue as {
         refreshToken: string
       }
-      const req = mockReqRefreshToken(refreshToken)
+      const req = mockReq({ refreshToken })
 
       const res = response
       const next = jest.fn()

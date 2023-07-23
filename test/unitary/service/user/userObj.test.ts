@@ -32,9 +32,10 @@ describe("User.ts", () => {
   describe("login", () => {
     it("Should be able to do the login normally", async () => {
       const req = mockReq(null)
+      await mockRegister(req)
       const login = await mockLogin(req)
 
-      expect(login.message).toBe("User Logged with success")
+      expect(login.message).toBe("User logged with success")
       expect(login.isError).toBe(false)
       expect(login.data).toBeDefined()
       expect(login.data).toHaveProperty("accessToken")

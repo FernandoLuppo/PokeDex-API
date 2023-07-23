@@ -46,9 +46,7 @@ describe("TokenUser.ts", () => {
     it("Should create new tokens when the original access token was expired", async () => {
       const req = mockReq(null)
       await mockRegister(req)
-      const newReq = await mockUserID(req)
-      await mockRegister(newReq)
-      await mockLogin(newReq)
+      await mockLogin(req)
 
       const RefreshToken = model("refreshTokens")
       const userRefreshToken = await RefreshToken.find()
@@ -66,10 +64,7 @@ describe("TokenUser.ts", () => {
       expect(newTokens.data).toHaveProperty("refreshToken")
     })
 
-    it("Should create new tokens when the original access token was expired", async () => {
-      const originalEnv = process.env
-      process.env = { ...originalEnv, REFRESH_TOKEN: undefined }
-
+    it("Should return an error when trying to create new tokens when access token expires", async () => {
       const req = mockReq(null)
       await mockRegister(req)
       await mockLogin(req)
@@ -81,6 +76,10 @@ describe("TokenUser.ts", () => {
       const reqRefreshToken = mockReq({ refreshToken })
       const token = new Token()
       const tokenUser = new TokenUser(reqRefreshToken, token)
+
+      const originalEnv = process.env
+      process.env = { ...originalEnv, REFRESH_TOKEN: undefined }
+
       const newTokens = await tokenUser.newTokens()
 
       expect(newTokens.error).toBe("Cookie is missing")

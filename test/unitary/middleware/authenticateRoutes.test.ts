@@ -13,7 +13,7 @@ import {
 describe("Authenticate.ts", () => {
   describe("login", () => {
     it("Should be able to cross the log authentication method normally", async () => {
-      const req = mockReq()
+      const req = mockReq(null)
       const res = response
       const next = jest.fn()
 
@@ -28,7 +28,7 @@ describe("Authenticate.ts", () => {
 
   describe("register", () => {
     it("Should be able to cross the register authentication method normally", async () => {
-      const req = mockReq()
+      const req = mockReq(null)
       const res = response
       const next = jest.fn()
 
@@ -45,7 +45,7 @@ describe("Authenticate.ts", () => {
 
   describe("newUserInfos", () => {
     it("Should be able to cross the newUserInfos authentication method normally", async () => {
-      const req = mockReq()
+      const req = mockReq(null)
       const res = response
       const next = jest.fn()
 
@@ -62,7 +62,7 @@ describe("Authenticate.ts", () => {
 
   describe("pokemonId", () => {
     it("Should be able to cross the pokemonId authentication method normally", async () => {
-      const req = mockReq()
+      const req = mockReq(null)
       req.body = { id: 1 }
       const res = response
       const next = jest.fn()
@@ -80,7 +80,7 @@ describe("Authenticate.ts", () => {
 
   describe("emailRecoverPassword", () => {
     it("Should be able to cross the emailRecoverPassword authentication method normally", async () => {
-      const req = mockReq()
+      const req = mockReq(null)
       const res = response
       const next = jest.fn()
 
@@ -97,7 +97,7 @@ describe("Authenticate.ts", () => {
 
   describe("recoverPassword", () => {
     it("Should be able to cross the recoverPassword authentication method normally", async () => {
-      const req = mockReq()
+      const req = mockReq(null)
       const res = response
       const next = jest.fn()
 
