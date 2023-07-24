@@ -1,9 +1,9 @@
-import type { Request } from "express"
-import { model } from "mongoose"
 import "../../model/Pokemon"
 import type { IResult } from "../../types"
-import { handlingErrors, isResult } from "../../utils"
 import type { PokemonApi } from "./PokemonApi"
+import { handlingErrors, isResult } from "../../utils"
+import type { Request } from "express"
+import { model } from "mongoose"
 
 export class PokemonUser {
   constructor(

@@ -1,8 +1,8 @@
-import { Router } from "express"
-import type { Request, Response } from "express"
 import { Authenticate } from "../../middleware"
 import { RecoverPasswordController } from "../../controller/recoverPasswordController"
 import { Email, EncryptPassword, RecoverPassword } from "../../service"
+import type { Request, Response } from "express"
+import { Router } from "express"
 
 const recoverPasswordRouter = Router()
 const authenticate = new Authenticate()

@@ -1,4 +1,3 @@
-import * as dotenv from "dotenv"
 import {
   mockAddPokemon,
   mockGetTeam,
@@ -7,7 +6,7 @@ import {
   mockReq,
   mockUserID
 } from "../../mock"
-
+import * as dotenv from "dotenv"
 dotenv.config()
 
 describe("PokemonUser.ts", () => {

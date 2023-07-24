@@ -1,10 +1,10 @@
-import type { Request } from "express"
-import { model } from "mongoose"
 import "../../model/RefreshToken"
 import type { Token } from "./Token"
 import type { IResult } from "../../types"
 import { handlingErrors, isResult } from "../../utils"
+import type { Request } from "express"
 import { verify } from "jsonwebtoken"
+import { model } from "mongoose"
 
 export class TokenUser {
   constructor(

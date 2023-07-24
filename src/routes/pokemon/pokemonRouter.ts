@@ -1,8 +1,8 @@
-import { Router } from "express"
-import type { Request, Response } from "express"
 import { PokemonController, TrainerController } from "../../controller/pokemon"
 import { PokemonApi, PokemonUrl, PokemonUser } from "../../service"
 import { Authenticate, TokenAuthenticate } from "../../middleware"
+import type { Request, Response } from "express"
+import { Router } from "express"
 
 const pokemonRouter = Router()
 const pokemonUrl = new PokemonUrl()

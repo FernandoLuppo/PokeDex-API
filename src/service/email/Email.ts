@@ -1,7 +1,7 @@
-import nodemailer from "nodemailer"
 import { recoverPasswordTemplate } from "./templates/recoverPasswordTemplates"
 import { handlingErrors, isResult } from "../../utils"
 import type { IResult } from "../../types"
+import nodemailer from "nodemailer"
 
 export class Email {
   async recoverPassword(recipient: string, code: number[]): Promise<IResult> {

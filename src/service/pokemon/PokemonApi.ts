@@ -10,8 +10,8 @@ import type {
   IPokemonTypes,
   IResult
 } from "../../types"
-import { handlingErrors, isResult, pokemonEvolutionUrl } from "../../utils"
 import type { PokemonUrl } from "./PokemonUrl"
+import { handlingErrors, isResult, pokemonEvolutionUrl } from "../../utils"
 
 export class PokemonApi {
   constructor(private readonly _PokemonUrl: PokemonUrl) {}

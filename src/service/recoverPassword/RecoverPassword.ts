@@ -1,10 +1,10 @@
-import type { Request } from "express"
-import { codeGenerator, handlingErrors, isResult } from "../../utils"
-import { model } from "mongoose"
 import "../../model/User"
 import type { Email } from "../email/Email"
 import type { IResult } from "../../types"
 import type { EncryptPassword } from "../encryptPassword/EncryptPassword"
+import { codeGenerator, handlingErrors, isResult } from "../../utils"
+import type { Request } from "express"
+import { model } from "mongoose"
 
 export class RecoverPassword {
   constructor(

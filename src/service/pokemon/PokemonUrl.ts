@@ -1,5 +1,5 @@
-import { Axios } from "../axios/Axios"
 import type { IResult } from "../../types"
+import { Axios } from "../axios/Axios"
 import { pokemonUrlHandleErrors } from "../../utils"
 
 export class PokemonUrl {

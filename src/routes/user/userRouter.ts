@@ -1,10 +1,10 @@
-import { Router } from "express"
-import type { Request, Response } from "express"
 import { Authenticate, TokenAuthenticate } from "../../middleware"
 import { UserController } from "../../controller/UserController"
 import { User } from "../../service/user/User"
 import { EncryptPassword } from "../../service/encryptPassword/EncryptPassword"
 import { Token, TokenUser } from "../../service"
+import type { Request, Response } from "express"
+import { Router } from "express"
 
 const userRouter = Router()
 const authenticate = new Authenticate()

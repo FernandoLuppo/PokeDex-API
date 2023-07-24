@@ -1,5 +1,5 @@
-import type { Response } from "express"
 import type { PokemonApi } from "../../service"
+import type { Response } from "express"
 
 export class PokemonController {
   constructor(

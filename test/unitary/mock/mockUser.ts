@@ -1,6 +1,6 @@
-import type { Request } from "express"
-import { EncryptPassword, Token, TokenUser, User } from "../../../src/service"
 import type { IResult } from "../../../src/types"
+import { EncryptPassword, Token, TokenUser, User } from "../../../src/service"
+import type { Request } from "express"
 
 export const mockRegister = async (req: Request): Promise<IResult> => {
   const user = new User(req)

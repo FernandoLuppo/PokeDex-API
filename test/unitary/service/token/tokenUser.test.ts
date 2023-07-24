@@ -1,6 +1,6 @@
-import { model } from "mongoose"
 import { Token, TokenUser } from "../../../../src/service"
 import { mockLogin, mockRegister, mockReq, mockUserID } from "../../mock"
+import { model } from "mongoose"
 import * as dotenv from "dotenv"
 dotenv.config()
 
@@ -42,6 +42,7 @@ describe("TokenUser.ts", () => {
       process.env = originalEnv
     })
   })
+
   describe("newTokens", () => {
     it("Should create new tokens when the original access token was expired", async () => {
       const req = mockReq(null)

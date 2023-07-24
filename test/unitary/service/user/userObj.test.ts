@@ -29,6 +29,7 @@ describe("User.ts", () => {
       expect(result.isError).toBe(true)
     })
   })
+
   describe("login", () => {
     it("Should be able to do the login normally", async () => {
       const req = mockReq(null)
@@ -74,6 +75,7 @@ describe("User.ts", () => {
       expect(userInfos.isError).toBe(true)
     })
   })
+
   describe("newUserInfos", () => {
     it("Should be able to update user information", async () => {
       const req = mockReq(null)

@@ -1,5 +1,5 @@
-import type { Response } from "express"
 import type { RecoverPassword, EncryptPassword } from "../service"
+import type { Response } from "express"
 
 export class RecoverPasswordController {
   constructor(

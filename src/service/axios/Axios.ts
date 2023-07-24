@@ -1,5 +1,5 @@
-import axios from "axios"
 import type { AxiosInstance } from "axios"
+import axios from "axios"
 
 export class Axios {
   baseUrl(): AxiosInstance {

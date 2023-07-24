@@ -1,6 +1,3 @@
-import { response } from "express"
-import { Authenticate } from "../../../src/middleware"
-import { mockReq } from "../mock"
 import {
   loginValidationSchema,
   registerValidationSchema,
@@ -9,6 +6,9 @@ import {
   emailRecoverPasswordValidationSchema,
   recoverPasswordValidationSchema
 } from "../../../src/middleware/authenticate/validationSchema/validationSchema"
+import { Authenticate } from "../../../src/middleware"
+import { mockReq } from "../mock"
+import { response } from "express"
 
 describe("Authenticate.ts", () => {
   describe("login", () => {

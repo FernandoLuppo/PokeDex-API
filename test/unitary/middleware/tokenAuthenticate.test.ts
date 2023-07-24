@@ -1,9 +1,10 @@
 import { Token } from "../../../src/service"
 import { mockReq } from "../mock"
 import { TokenAuthenticate } from "../../../src/middleware"
-import * as dotenv from "dotenv"
 import { response } from "express"
+import * as dotenv from "dotenv"
 dotenv.config()
+
 describe("tokenAuthenticate.ts", () => {
   describe("accessTokenAuthenticate", () => {
     it("Should call the next() without errors", async () => {

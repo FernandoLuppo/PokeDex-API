@@ -1,14 +1,13 @@
-import express from "express"
-import cors from "cors"
-import cookieParser from "cookie-parser"
 import {
   userRouter,
   tokenRouter,
   pokemonRouter,
   recoverPasswordRouter
 } from "./routes"
-
 import "./types"
+import express from "express"
+import cors from "cors"
+import cookieParser from "cookie-parser"
 import mongoose from "mongoose"
 import * as dotenv from "dotenv"
 dotenv.config()

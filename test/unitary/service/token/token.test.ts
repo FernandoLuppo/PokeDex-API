@@ -32,6 +32,7 @@ describe("Token.ts", () => {
       process.env = originalEnv
     })
   })
+
   describe("createRefreshToken", () => {
     it("Should create a refresh token correctly", () => {
       const id = "123456789"

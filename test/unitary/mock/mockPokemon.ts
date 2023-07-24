@@ -1,6 +1,6 @@
-import type { Request } from "express"
-import { PokemonApi, PokemonUrl, PokemonUser } from "../../../src/service"
 import type { IResult } from "../../../src/types"
+import { PokemonApi, PokemonUrl, PokemonUser } from "../../../src/service"
+import type { Request } from "express"
 
 export const mockAddPokemon = async (
   pokemonId: number,

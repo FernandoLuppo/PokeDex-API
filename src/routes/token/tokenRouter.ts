@@ -1,8 +1,8 @@
-import { Router } from "express"
-import type { Request, Response } from "express"
 import { TokenController } from "../../controller/TokenControlle"
 import { Token, TokenUser } from "../../service"
 import { TokenAuthenticate } from "../../middleware"
+import type { Request, Response } from "express"
+import { Router } from "express"
 
 const tokenRouter = Router()
 const token = new Token()

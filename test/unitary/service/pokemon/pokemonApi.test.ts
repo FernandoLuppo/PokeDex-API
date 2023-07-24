@@ -1,5 +1,5 @@
-import * as dotenv from "dotenv"
 import { PokemonApi, PokemonUrl } from "../../../../src/service"
+import * as dotenv from "dotenv"
 dotenv.config()
 
 describe("PokemonApi.ts", () => {

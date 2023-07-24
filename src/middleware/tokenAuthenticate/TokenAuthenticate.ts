@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express"
-import { verify } from "jsonwebtoken"
 import type { IResult } from "../../types"
+import { verify } from "jsonwebtoken"
 
 declare global {
   namespace Express {

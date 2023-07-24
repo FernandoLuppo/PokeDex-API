@@ -1,11 +1,11 @@
+import "../../model/Pokemon"
+import "../../model/User"
+import type { EncryptPassword } from "../encryptPassword/EncryptPassword"
+import type { TokenUser } from "../token/TokenUser"
+import type { IResult } from "../../types"
+import { handlingErrors, isResult } from "../../utils"
 import type { Request } from "express"
 import { model } from "mongoose"
-import "../../model/User"
-import "../../model/Pokemon"
-import type { EncryptPassword } from "../encryptPassword/EncryptPassword"
-import type { IResult } from "../../types"
-import type { TokenUser } from "../token/TokenUser"
-import { handlingErrors, isResult } from "../../utils"
 
 interface IRegisterValidation {
   name: string

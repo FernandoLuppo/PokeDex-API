@@ -1,5 +1,5 @@
-import { sign } from "jsonwebtoken"
 import type { IResult } from "../../types"
+import { sign } from "jsonwebtoken"
 import dayjs from "dayjs"
 
 export class Token {

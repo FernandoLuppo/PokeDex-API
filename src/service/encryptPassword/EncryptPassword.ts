@@ -1,6 +1,6 @@
-import bcryptjs from "bcrypt"
 import type { IResult } from "../../types"
 import { handlingErrors } from "../../utils"
+import bcryptjs from "bcrypt"
 
 export class EncryptPassword {
   encrypt(userPassword: string): { encryptedUserPassword: string } {

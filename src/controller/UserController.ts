@@ -1,6 +1,6 @@
-import type { Response } from "express"
 import type { TokenUser, User } from "../service"
 import type { EncryptPassword } from "../service/encryptPassword/EncryptPassword"
+import type { Response } from "express"
 
 export class UserController {
   constructor(

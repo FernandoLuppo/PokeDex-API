@@ -1,5 +1,3 @@
-import type * as yup from "yup"
-import type { Request, Response, NextFunction } from "express"
 import {
   pokemonIdValidationSchema,
   loginValidationSchema,
@@ -8,6 +6,8 @@ import {
   emailRecoverPasswordValidationSchema,
   recoverPasswordValidationSchema
 } from "./validationSchema/validationSchema"
+import type { Request, Response, NextFunction } from "express"
+import type * as yup from "yup"
 
 export class Authenticate {
   async login(req: Request, res: Response, next: NextFunction): Promise<void> {

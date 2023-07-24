@@ -1,5 +1,5 @@
-import type { Response } from "express"
 import type { TokenUser } from "../service"
+import type { Response } from "express"
 
 export class TokenController {
   constructor(
