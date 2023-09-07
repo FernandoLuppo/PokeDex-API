@@ -29,12 +29,11 @@ export class PokemonUser {
         types: infos.data.types,
         genericInfos: infos.data.genericInfos,
         levels: infos.data.levels,
-        description: infos.data.description
+        description: infos.data.description,
+        isUserTeam: true
       }
 
-      return {
-        pokemon: data
-      }
+      return data
     })
 
     const team = await Promise.all(teamPromise)
@@ -85,7 +84,8 @@ export class PokemonUser {
     }
 
     const Pokemon = model("pokemons")
-    const pokemonId = this._req.body.id
+    const pokemonId = this._req.params.id
+    const pokemonIdNumber = Number(pokemonId)
     const userId = this._req.user.id
 
     const trainer = await Pokemon.findOne({ pokemonTrainer: userId })
@@ -97,7 +97,9 @@ export class PokemonUser {
         return isResult(removePokemonValidation)
       }
 
-      const newTeam = trainer.pokeId.filter((num: number) => num !== pokemonId)
+      const newTeam = trainer.pokeId.filter(
+        (num: number) => num !== pokemonIdNumber
+      )
       await Pokemon.updateOne({ pokeId: newTeam })
       result.message = "Pokemon removed from team"
       result.data = await this.userTeam()
@@ -128,15 +130,11 @@ export class PokemonUser {
         return result
       }
 
-      trainer.pokeId.forEach((id: number) => {
-        if (id === pokemonId) {
-          result.isError = true
-          result.error = "This Pokemon is already in your team"
-          return result
-        }
-      })
+      const haveError = await this._PokemonApi.getOne(pokemonId)
 
-      await this._PokemonApi.getOne(pokemonId)
+      if (haveError.isError) {
+        return haveError
+      }
 
       return result
     } catch (err) {
@@ -154,22 +152,21 @@ export class PokemonUser {
 
     const Pokemon = model("pokemons")
     const id = this._req.user.id
-    const pokemonId = this._req.body.id
+    const pokemonId = this._req.params.id
+    const pokeIdInNumber = Number(pokemonId)
+
     const trainer = await Pokemon.findOne({ pokemonTrainer: id })
-    let isInTeam
+    let isInTeam = false
 
     try {
       trainer.pokeId.forEach((num: number) => {
-        if (num === pokemonId) {
+        if (num === pokeIdInNumber) {
           isInTeam = true
           return isInTeam
         }
-
-        isInTeam = false
-        return isInTeam
       })
 
-      if (isInTeam !== true) {
+      if (!isInTeam) {
         result.isError = true
         result.error = "This pokemon is not part of your team"
         return result

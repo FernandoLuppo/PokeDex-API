@@ -88,10 +88,17 @@ export class Authenticate {
     next: NextFunction
   ): Promise<void> {
     const result = { message: "", isError: false, error: [""] }
+    let id
+
+    if (req.body.id === undefined) {
+      id = req.params
+    } else {
+      id = req.body
+    }
 
     try {
       await pokemonIdValidationSchema
-        .validate(req.body, {
+        .validate(id, {
           abortEarly: false
         })
         .then(() => {})

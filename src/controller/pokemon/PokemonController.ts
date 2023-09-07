@@ -1,5 +1,5 @@
 import type { PokemonApi } from "../../service"
-import type { Response } from "express"
+import type { Request, Response } from "express"
 
 export class PokemonController {
   constructor(
@@ -7,8 +7,8 @@ export class PokemonController {
     private readonly _PokemonApi: PokemonApi
   ) {}
 
-  async getAll(): Promise<void> {
-    const result = await this._PokemonApi.getAll()
+  async getAll(req: Request): Promise<void> {
+    const result = await this._PokemonApi.getAll(req)
 
     if (result.isError) {
       this._res.status(400).send(result)

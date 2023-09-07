@@ -9,9 +9,10 @@ const pokemonUrl = new PokemonUrl()
 const tokenAuthenticate = new TokenAuthenticate()
 const authenticate = new Authenticate()
 
-pokemonRouter.get("/get-all", async (req: Request, res: Response) => {
+pokemonRouter.post("/get-all", async (req: Request, res: Response) => {
   const pokemonApi = new PokemonApi(pokemonUrl)
-  await new PokemonController(res, pokemonApi).getAll()
+
+  await new PokemonController(res, pokemonApi).getAll(req)
 })
 
 pokemonRouter.post("/get-one", async (req: Request, res: Response) => {
@@ -46,7 +47,7 @@ pokemonRouter.put(
 )
 
 pokemonRouter.delete(
-  "/remove",
+  "/remove/:id",
   tokenAuthenticate.accessTokenAuthenticate,
   authenticate.pokemonId,
   async (req: Request, res: Response) => {

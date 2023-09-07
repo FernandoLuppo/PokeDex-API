@@ -45,7 +45,7 @@ describe("PokemonUser.ts", () => {
       const newReq = await mockUserID(req)
 
       await mockAddPokemon(1, newReq)
-      const result = await mockRemovePokemon(newReq)
+      const result = await mockRemovePokemon(1, newReq)
 
       expect(result.message).toBe("Pokemon removed from team")
       expect(result.isError).toBe(false)
@@ -60,7 +60,7 @@ describe("PokemonUser.ts", () => {
       await mockRegister(req)
       const newReq = await mockUserID(req)
 
-      const result = await mockRemovePokemon(newReq)
+      const result = await mockRemovePokemon(1, newReq)
 
       expect(result.error).toBe("This pokemon is not part of your team")
       expect(result.isError).toBe(true)

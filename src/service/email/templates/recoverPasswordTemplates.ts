@@ -11,7 +11,7 @@ export const recoverPasswordTemplate = (
   const template = {
     from: sender,
     to: recipient,
-    subject: "LuppoTW Movie - Recuperar senha!",
+    subject: "LuppoTW - Recuperar senha!",
     html: `
         <h3 style="color: #000;">Precisa restaurar sua senha?</h3>
         <p style="color: #000;">

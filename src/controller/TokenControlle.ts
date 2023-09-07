@@ -22,11 +22,13 @@ export class TokenController {
       .status(200)
       .cookie("accessToken", result.data.accessToken, {
         maxAge: 4.32e8,
-        httpOnly: true
+        httpOnly: false,
+        sameSite: "lax"
       })
       .cookie("refreshToken", result.data.refreshToken, {
         maxAge: 4.32e8,
-        httpOnly: true
+        httpOnly: false,
+        sameSite: "lax"
       })
       .send(resultWithoutData)
   }

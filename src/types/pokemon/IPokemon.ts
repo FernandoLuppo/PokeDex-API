@@ -69,6 +69,7 @@ export interface IGetPokemonInfos {
 export interface IPokemonMovies {
   movie: string
   level: number
+  type: string
 }
 
 export interface IPokemonBaseStatus {

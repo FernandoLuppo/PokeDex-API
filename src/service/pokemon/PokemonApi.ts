@@ -12,13 +12,17 @@ import type {
 } from "../../types"
 import type { PokemonUrl } from "./PokemonUrl"
 import { handlingErrors, isResult, pokemonEvolutionUrl } from "../../utils"
+import type { Request } from "express"
 
 export class PokemonApi {
   constructor(private readonly _PokemonUrl: PokemonUrl) {}
 
-  async getAll(): Promise<IResult> {
+  async getAll(req: Request): Promise<IResult> {
     let result: IResult = { message: "", isError: false, error: "", data: {} }
-    const getAll = await this._PokemonUrl.getAll()
+
+    const { start, end } = req.body
+
+    const getAll = await this._PokemonUrl.getAll(start, end)
     const pokemonHome = []
 
     if (isResult(getAll).isError) {
@@ -38,10 +42,12 @@ export class PokemonApi {
         )
 
         pokemonHome.push({
-          type: types,
-          name: genericInfos.name,
-          id: genericInfos.id,
-          sprit: genericInfos.sprit
+          types,
+          genericInfos: {
+            name: genericInfos.name,
+            id: genericInfos.id,
+            sprit: genericInfos.sprit
+          }
         })
       } catch (err) {
         return handlingErrors(err)
@@ -147,7 +153,8 @@ export class PokemonApi {
           if (group.move_learn_method.name === "level-up") {
             pokemonMovie.push({
               movie: movie.move.name,
-              level: group.level_learned_at
+              level: group.level_learned_at,
+              type: group.move_learn_method.name
             })
           }
         }

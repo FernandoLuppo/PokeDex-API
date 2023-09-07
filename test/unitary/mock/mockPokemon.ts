@@ -15,7 +15,11 @@ export const mockAddPokemon = async (
   return await pokemon.addPokemon()
 }
 
-export const mockRemovePokemon = async (req: any): Promise<IResult> => {
+export const mockRemovePokemon = async (
+  pokemonId: number,
+  req: any
+): Promise<IResult> => {
+  req.params.id = pokemonId
   const url = new PokemonUrl()
   const api = new PokemonApi(url)
   const pokemon = new PokemonUser(req, api)

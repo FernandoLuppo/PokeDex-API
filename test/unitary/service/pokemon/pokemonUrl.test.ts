@@ -5,8 +5,11 @@ dotenv.config()
 describe("PokemonUrl.ts", () => {
   describe("getAll", () => {
     it("Should get a list o pokemon", async () => {
+      const start = 0
+      const end = 20
+
       const url = new PokemonUrl()
-      const result = await url.getAll()
+      const result = await url.getAll(start, end)
 
       expect(result.isError).toBe(false)
       expect(result.data).toBeDefined()

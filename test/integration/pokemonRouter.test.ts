@@ -6,7 +6,16 @@ import { mockTokens } from "./mocks"
 describe("pokemonRouter.ts", () => {
   describe("get-all", () => {
     it("Should get some pokemons", async () => {
-      const response = await supertest(app).get("/pokemon/get-all")
+      const req = {
+        body: {
+          start: 0,
+          end: 2
+        }
+      }
+
+      const response = await supertest(app)
+        .post("/pokemon/get-all")
+        .send(req.body)
 
       expect(response.status).toBe(200)
       expect(response.body.message).toBe(
@@ -14,11 +23,11 @@ describe("pokemonRouter.ts", () => {
       )
       expect(response.body.isError).toBe(false)
       expect(response.body.data).toBeDefined()
-      expect(response.body.data.length).toBeGreaterThan(10)
-      expect(response.body.data[0]).toHaveProperty("type")
-      expect(response.body.data[0]).toHaveProperty("name")
-      expect(response.body.data[0]).toHaveProperty("id")
-      expect(response.body.data[0]).toHaveProperty("sprit")
+      expect(response.body.data.length).toBe(req.body.end)
+      expect(response.body.data[0]).toHaveProperty("types")
+      expect(response.body.data[0].genericInfos).toHaveProperty("name")
+      expect(response.body.data[0].genericInfos).toHaveProperty("id")
+      expect(response.body.data[0].genericInfos).toHaveProperty("sprit")
     })
   })
 
@@ -181,8 +190,7 @@ describe("pokemonRouter.ts", () => {
         )
 
       const response = await supertest(app)
-        .delete("/pokemon/remove")
-        .send(req.body)
+        .delete("/pokemon/remove/1")
         .set(
           "Cookie",
           `${cookiesAccessTokenValidValue}; ${cookiesRefreshTokenValidValue}`
@@ -205,8 +213,7 @@ describe("pokemonRouter.ts", () => {
         await mockTokens()
 
       const response = await supertest(app)
-        .delete("/pokemon/remove")
-        .send(req.body)
+        .delete("/pokemon/remove/1")
         .set(
           "Cookie",
           `${cookiesAccessTokenValidValue}; ${cookiesRefreshTokenValidValue}`

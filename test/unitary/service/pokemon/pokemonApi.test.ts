@@ -1,23 +1,28 @@
 import { PokemonApi, PokemonUrl } from "../../../../src/service"
+import type { Request } from "express"
 import * as dotenv from "dotenv"
 dotenv.config()
 
 describe("PokemonApi.ts", () => {
   describe("getAll", () => {
     it("Should call some pokemon and they basic information", async () => {
+      const req = {
+        body: {}
+      }
+
       jest.setTimeout(10000)
       const url = new PokemonUrl()
       const api = new PokemonApi(url)
-      const result = await api.getAll()
+      const result = await api.getAll(req as Request)
 
       expect(result.message).toBe("List of pokemons uploaded successfully")
       expect(result.isError).toBe(false)
       expect(result.data).toBeDefined()
       expect(result.data.length).toBeGreaterThan(10)
-      expect(result.data[0]).toHaveProperty("type")
-      expect(result.data[0]).toHaveProperty("name")
-      expect(result.data[0]).toHaveProperty("id")
-      expect(result.data[0]).toHaveProperty("sprit")
+      expect(result.data[0]).toHaveProperty("types")
+      expect(result.data[0].genericInfos).toHaveProperty("name")
+      expect(result.data[0].genericInfos).toHaveProperty("id")
+      expect(result.data[0].genericInfos).toHaveProperty("sprit")
     })
   })
   describe("getOne", () => {

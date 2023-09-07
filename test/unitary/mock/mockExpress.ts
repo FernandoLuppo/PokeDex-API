@@ -10,6 +10,7 @@ interface IMockReq {
 
 export const mockReq = (data: IMockReq | null): Request => {
   const req = {
+    params: {},
     body: {
       name: "Fernando Luppo",
       email: "fernandoluppo2@gmail.com",
@@ -24,6 +25,8 @@ export const mockReq = (data: IMockReq | null): Request => {
       refreshToken: data?.refreshToken
     }
   }
+
+  req.params = { id: data?.pokemonId }
 
   return req as Request
 }

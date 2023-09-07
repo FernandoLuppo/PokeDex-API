@@ -14,8 +14,7 @@ describe("tokenRouter.ts", () => {
         await mockTokens()
 
       const response = await supertest(app)
-        .put("/token/new-token")
-        .send(req.body)
+        .get("/token/new-token")
         .set(
           "Cookie",
           `${cookiesAccessTokenValidValue}; ${cookiesRefreshTokenValidValue}`
@@ -26,11 +25,7 @@ describe("tokenRouter.ts", () => {
     })
 
     it("Should return a error when user request a new token", async () => {
-      const req = mockReq(null)
-
-      const response = await supertest(app)
-        .put("/token/new-token")
-        .send(req.body)
+      const response = await supertest(app).get("/token/new-token")
 
       expect(response.body.error).toBe("jwt must be provided")
       expect(response.body.isError).toBe(true)
