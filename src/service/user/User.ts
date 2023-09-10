@@ -101,7 +101,10 @@ export class User {
     }
 
     try {
-      await User.updateOne({ id }, newInfos)
+      await User.updateOne(
+        { _id: id },
+        { $set: { name: newInfos.name, email: newInfos.email } }
+      )
       const { name, email } = await User.findById(id)
 
       result.message = "User information has been updated"

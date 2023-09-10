@@ -64,7 +64,11 @@ export class PokemonUser {
 
     try {
       const newTeam = [...trainer.pokeId, pokemonId]
-      await Pokemon.updateOne({ pokeId: newTeam })
+
+      await Pokemon.updateOne(
+        { pokemonTrainer: userId },
+        { $set: { pokeId: newTeam } }
+      )
 
       result.message = "Pokemon added to team"
       result.data = await this.userTeam()
@@ -122,16 +126,14 @@ export class PokemonUser {
     const pokemonId = this._req.body.id
     const Pokemon = model("pokemons")
     const trainer = await Pokemon.findOne({ pokemonTrainer: userId })
-
     try {
-      if (trainer.pokeId.length > 6) {
+      if (trainer.pokeId.length > 5) {
         result.isError = true
         result.error = "Team already full"
         return result
       }
 
       const haveError = await this._PokemonApi.getOne(pokemonId)
-
       if (haveError.isError) {
         return haveError
       }
