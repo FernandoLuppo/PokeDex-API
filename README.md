@@ -36,7 +36,8 @@
 <h2>Links</h2>
 <p>
   <strong>🖥️ Link do repositório do front do projeto: https://github.com/FernandoLuppo/PokeDex</strong>
-  <br>
+</p>
+<p>
   <strong>📚 Link da documentação: https://documenter.getpostman.com/view/25854787/2s9YC1Xa23</strong>
 </p>
 <br><br>
