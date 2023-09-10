@@ -148,8 +148,7 @@
 
 <h2>Rotas do Pokemon - Abertas</h2>
 <p>
-  <strong>One Pokemon:</strong> Essa rota serve para pegar apenas um pokemon, a resposta desta rota vem com mais informações do uq a rota All Pokemon em questão
-  do que a rota All Pokemon, o valor dessa rota é:
+  <strong>One Pokemon:</strong> Essa rota serve para pegar apenas um pokemon, a resposta desta rota vem com mais informações do uq a rota All Pokemon, o valor dessa rota é:
   <br>
   <br> - <strong>id</strong>
   <br><br>
