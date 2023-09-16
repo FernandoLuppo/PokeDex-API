@@ -60,7 +60,15 @@ export class TokenUser {
         return result
       }
 
-      await RefreshToken.updateOne({ userToken: id }, newRefreshToken)
+      await RefreshToken.updateOne(
+        { userToken: id },
+        {
+          $set: {
+            refreshToken: newRefreshToken.refreshToken,
+            expireDat: newRefreshToken.expireDat
+          }
+        }
+      )
 
       result.message = "Tokens create with success"
       result.data = { accessToken, refreshToken }
@@ -111,7 +119,16 @@ export class TokenUser {
         expireDat: refreshTokenExpiresDate
       }
 
-      await RefreshToken.updateOne({ userToken: sub }, newRefreshToken)
+      await RefreshToken.updateOne(
+        { userToken: sub },
+        {
+          $set: {
+            refreshToken: newRefreshToken.refreshToken,
+            expireDat: newRefreshToken.expireDat
+          }
+        }
+      )
+
       result.message = "New tokens create with success"
       result.data = { accessToken, refreshToken }
       return result

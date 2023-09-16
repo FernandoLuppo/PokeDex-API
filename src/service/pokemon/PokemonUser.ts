@@ -104,7 +104,12 @@ export class PokemonUser {
       const newTeam = trainer.pokeId.filter(
         (num: number) => num !== pokemonIdNumber
       )
-      await Pokemon.updateOne({ pokeId: newTeam })
+
+      await Pokemon.updateOne(
+        { pokemonTrainer: userId },
+        { $set: { pokeId: newTeam } }
+      )
+
       result.message = "Pokemon removed from team"
       result.data = await this.userTeam()
 

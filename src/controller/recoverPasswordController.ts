@@ -9,7 +9,6 @@ export class RecoverPasswordController {
 
   async checkEmail(): Promise<void> {
     const result = await this._RecoverPassword.checkEmail()
-    console.log(result)
 
     if (result.isError) {
       this._res.status(401).send(result)

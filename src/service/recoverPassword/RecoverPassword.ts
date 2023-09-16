@@ -59,7 +59,11 @@ export class RecoverPassword {
     }
 
     try {
-      await User.updateOne({ password: newPassword.encryptedUserPassword })
+      await User.updateOne(
+        { email },
+        { $set: { password: newPassword.encryptedUserPassword } }
+      )
+
       result.message = "Password successfully updated"
 
       return result
